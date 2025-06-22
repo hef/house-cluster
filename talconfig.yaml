@@ -1,9 +1,29 @@
 clusterName: house
-endpoint: https://192.168.1.200
+endpoint: https://192.168.1.200:6443
+allowSchedulingOnMasters: true
+allowSchedulingOnControlPlanes: true
+additionalMachineCertSans:
+  - 192.168.1.200
+additionalApiServerCertSans:
+  - house.local
+cniConfig:
+#  name: flannel
+   name: none
+patches:
+  - "@./patches/cluster-config.yaml"
 nodes:
    - hostname: k8s-3
      controlPlane: true
      ipAddress: 192.168.1.165
+     networkInterfaces:
+       - deviceSelector:
+           physical: true
+         dhcp: true
+         vip:
+           ip: 192.168.1.200
      installDisk: /dev/sda
-     nodeLabels:
-       rack: rack1
+     schematic:
+       overlay:
+         name: rpi_generic
+         image: siderolabs/sbc-raspberrypi
+
