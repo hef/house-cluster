@@ -1,0 +1,9 @@
+clusterName: house
+endpoint: https://192.168.1.200
+nodes:
+   - hostname: k8s-3
+     controlPlane: true
+     ipAddress: 192.168.1.165
+     installDisk: /dev/sda
+     nodeLabels:
+       rack: rack1
