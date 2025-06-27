@@ -1,0 +1,20 @@
+version: 3
+
+vars:
+  APPLY_CMD:
+    sh: talhelper gencommand apply --extra-flags="--insecure"
+  BOOTSTRAP_CMD:
+    sh: talhelper gencommand bootstrap
+  KUBECONFIG_CMD:
+    sh: talhelper gencommand kubeconfig --extra-flags="{{.ROOT_DIR}} --force"
+  
+tasks:
+  talos:
+    desc: Bootstrap the Talos cluster
+    cmds:
+      - talhelper genconfig
+      - until {{.APPLY_CMD}} do sleep 10; done
+      - until {{.BOOTSTRAP_CMD}} do sleep 10; done
+      - until {{.KUBECONFIG_CMD}} do sleep 10; done
+      - until kubectl version; do sleep 10; done
+      - helmfile -f helmfile.yaml sync

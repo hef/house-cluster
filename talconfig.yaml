@@ -9,12 +9,10 @@ additionalApiServerCertSans:
 cniConfig:
 #  name: flannel
    name: none
-patches:
-  - "@./patches/cluster-config.yaml"
 nodes:
-   - hostname: k8s-3
+   - hostname: k8s-4
      controlPlane: true
-     ipAddress: 192.168.1.165
+     ipAddress: 192.168.1.21
      networkInterfaces:
        - deviceSelector:
            physical: true
@@ -22,8 +20,16 @@ nodes:
          vip:
            ip: 192.168.1.200
      installDisk: /dev/sda
+   - hostname: k8s-3
+     controlPlane: false
+     ipAddress: 192.168.1.165
+     installDisk: /dev/sda
      schematic:
        overlay:
          name: rpi_generic
          image: siderolabs/sbc-raspberrypi
+controlPlane:
+  patches:
+    - "@./patches/controller/cluster-config.yaml"
+
 
