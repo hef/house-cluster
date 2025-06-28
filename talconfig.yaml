@@ -7,29 +7,49 @@ additionalMachineCertSans:
 additionalApiServerCertSans:
   - house.local
 cniConfig:
-#  name: flannel
    name: none
 nodes:
-   - hostname: k8s-4
-     controlPlane: true
-     ipAddress: 192.168.1.21
-     networkInterfaces:
-       - deviceSelector:
-           physical: true
-         dhcp: true
-         vip:
-           ip: 192.168.1.200
-     installDisk: /dev/sda
-   - hostname: k8s-3
-     controlPlane: false
-     ipAddress: 192.168.1.165
-     installDisk: /dev/sda
-     schematic:
-       overlay:
-         name: rpi_generic
-         image: siderolabs/sbc-raspberrypi
+    - hostname: k8s-4
+      controlPlane: true
+      ipAddress: 192.168.1.21
+      machineSpec:
+        mode: metal
+        arch: amd64
+        secureboot: true
+        useUKI: true
+      networkInterfaces:
+        - deviceSelector:
+            physical: true
+          dhcp: true
+          vip:
+            ip: 192.168.1.200
+      installDisk: /dev/sda
+      kernelModules:
+        - name: zfs
+      schematic:
+        customization:
+          extraKernelArgs:
+            - net.ifnames=0
+            - amd_pstate=active
+            - mitigations=off
+            - iommu.passthrough=1
+          systemExtensions:
+            officialExtensions:
+              - siderolabs/amd-ucode
+              - siderolabs/amdgpu
+              - siderolabs/zfs
+   #- hostname: k8s-3
+   #  controlPlane: false
+   #  ipAddress: 192.168.1.165
+   #  installDisk: /dev/sda
+   #  schematic:
+   #    overlay:
+   #      name: rpi_generic
+   #      image: siderolabs/sbc-raspberrypi
 controlPlane:
+
   patches:
     - "@./patches/controller/cluster-config.yaml"
+  
 
 

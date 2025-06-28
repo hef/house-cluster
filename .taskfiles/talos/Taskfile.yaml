@@ -9,4 +9,19 @@ tasks:
     desc: reset cluster back to maitinance mode
     cmds:
      - "{{.RESET_CMD}}"
+  genconfig:
+    desc: Generate Talos Config
+    cmd: talhelper genconfig
+  apply:
+    desc: apply config
+    cmds:
+      - talhelper gencommand apply --node 192.168.1.21 --extra-flags="--mode=reboot"
+  upgrade:
+    desc: "Upgrade Talos"
+    cmds:
+      - "{{.UPGRADE_CMD}}"
+    vars:
+      UPGRADE_CMD:
+        sh: talhelper gencommand upgrade --node 192.168.1.21 --timeout=10m"
+
     
