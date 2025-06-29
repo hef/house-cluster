@@ -18,7 +18,7 @@ metadata:
   namespace: default
 spec:
   containers:
-  - name: myapp
+  - name: debian
     command: ["sleep", "infinity"]
     image: debian
     volumeMounts:

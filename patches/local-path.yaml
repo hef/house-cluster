@@ -1,3 +1,6 @@
+# This exposes the "openebs" uservolume to the kubelet container.
+# this allows that path to be further exposeed to containers
+# hugepages and the mayastor would be for openebs's mayastor if I used it.
 machine:
   sysctls:
     vm.nr_hugepages: "1024"

@@ -8,6 +8,7 @@ serviceAccount:
 service:
   name: kube-dns
   #clusterIP: "#{ cluster_svc_cidr | nthhost(10) }#"
+  clusterIP: 10.96.0.10
 replicaCount: 1
 #replicaCount: 2
 servers:

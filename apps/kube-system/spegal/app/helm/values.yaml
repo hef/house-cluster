@@ -1,0 +1,11 @@
+spegel:
+  containerdRegistryConfigPath: /etc/cri/conf.d/hosts
+service:
+  registry:
+    hostPort: 29999
+serviceMonitor:
+  #todo: enable
+  enabled: false
+grafanaDashboard:
+  #todo: enable
+  enabled: false
