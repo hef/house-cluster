@@ -1,0 +1,33 @@
+alloy:
+  enabled: false
+engines:
+  local:
+    lvm:
+      enabled: false
+    zfs:
+      enabled: false
+  replicated:
+    mayastor:
+      enabled: false
+  mayastor:
+    crds:
+      csi:
+        volumeSnapshots:
+          enabled: true
+    csi:
+      node:
+        initContainers:
+          enabled: false
+  zfs-localpv:
+    crds:
+      csi:
+        volumeSnapshots:
+          enabled: true
+localpv-provisioner:
+  localpv:
+    enabled: true
+    basePath: /var/mnt/openebs/local
+loki:
+  enabled: false
+  
+  

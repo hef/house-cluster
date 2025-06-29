@@ -23,9 +23,30 @@ nodes:
           dhcp: true
           vip:
             ip: 192.168.1.200
-      installDisk: /dev/sda
+      installDisk: /dev/nvme0n1
+      userVolumes:
+        - name: openebs
+          provisioning:
+            diskSelector:
+              match: disk.transport == "nvme"
+            maxSize: "200GiB"
+          filesystem:
+            type: xfs
       kernelModules:
         - name: zfs
+      volumes:
+        - name: EPHEMERAL
+          provisioning:
+            diskSelector:
+              match: disk.transport == "nvme"
+            maxSize: 50GiB
+        - name: IMAGECACHE
+          provisioning:
+            diskSelector:
+              match: disk.transport == "nvme"
+            maxSize: 50GiB
+      patches:
+        - "@./patches/local-path.yaml"
       schematic:
         customization:
           extraKernelArgs:
@@ -47,7 +68,6 @@ nodes:
    #      name: rpi_generic
    #      image: siderolabs/sbc-raspberrypi
 controlPlane:
-
   patches:
     - "@./patches/controller/cluster-config.yaml"
   

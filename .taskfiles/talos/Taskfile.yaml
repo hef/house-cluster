@@ -22,6 +22,6 @@ tasks:
       - "{{.UPGRADE_CMD}}"
     vars:
       UPGRADE_CMD:
-        sh: talhelper gencommand upgrade --node 192.168.1.21 --timeout=10m"
+        sh: talhelper gencommand upgrade --node 192.168.1.21 --extra-flags="--timeout='10m'"
 
     

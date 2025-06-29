@@ -1,0 +1,38 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: hef-data
+  namespace: default
+spec:
+  storageClassName: openebs-hostpath
+  resources:
+    requests:
+      storage: 1Gi
+  accessModes:
+    - ReadWriteOnce
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: hef
+  namespace: default
+spec:
+  containers:
+  - name: myapp
+    command: ["sleep", "infinity"]
+    image: debian
+    volumeMounts:
+      - mountPath: /data
+        name: hef-data
+    securityContext:
+      runAsUser: 1000
+      allowPrivilegeEscalation: false
+      capabilities:
+        drop: ["ALL"]
+      runAsNonRoot: true  
+      seccompProfile:
+        type: RuntimeDefault
+  volumes:
+    - name: hef-data
+      persistentVolumeClaim:
+        claimName: hef-data

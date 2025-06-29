@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: hef
+  labels:
+    pod-security.kubernetes.io/enforce: privileged
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: zfs-shell
+  namespace: hef
+spec:
+  nodeName: k8s-4
+  hostIPC: true
+  hostNetwork: true
+  hostPID: true
+  containers:
+    - command: ["sleep", "infinity"]
+      image: debian
+      name: shell
+      securityContext:
+        privileged: true
