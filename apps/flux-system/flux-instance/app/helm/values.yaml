@@ -14,7 +14,7 @@ instance:
     kind: GitRepository
     url: "https://github.com/hef/house-cluster.git"
     ref: "refs/heads/main"
-    path: kubernetes/flux/cluster
+    path: flux/cluster
   commonMetadata:
     labels:
       app.kubernetes.io/name: flux
