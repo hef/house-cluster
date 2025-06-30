@@ -17,4 +17,7 @@ tasks:
       - until {{.BOOTSTRAP_CMD}} do sleep 10; done
       - until {{.KUBECONFIG_CMD}} do sleep 10; done
       - until kubectl version; do sleep 10; done
+      # todo: bootstrap_dir
+      # todo: does this work before the flux-system namespace exists?
+      - sops exec-file bootstrap/sops.sops.yaml "kubectl --namespace flux-system apply --server-side --filename {}"
       - helmfile -f helmfile.yaml sync
