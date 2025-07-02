@@ -7,4 +7,4 @@ namespace: flux-system
 #  - ../../components/common
 resources:
   - ./flux-instance/ks.yaml
-#  - ./flux-operator/ks.yaml
+  - ./flux-operator/ks.yaml
