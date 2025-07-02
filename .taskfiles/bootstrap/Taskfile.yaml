@@ -19,4 +19,4 @@ tasks:
       - until {{.KUBECONFIG_CMD}} do sleep 10; done
       - until kubectl version; do sleep 10; done
       - helmfile -f helmfile.yaml sync
-      - sops exec-file bootstrap/sops.sops.yaml "kubectl --namespace flux-system apply --server-side --filename {}"
+      - sops exec-file apps/common/sops.sops.yaml "kubectl --namespace flux-system apply --server-side --filename {}"
