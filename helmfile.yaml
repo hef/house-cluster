@@ -42,7 +42,7 @@ releases:
     chart: oci://quay.io/jetstack/charts/cert-manager
     version: v1.17.2
     values: ['apps/cert-manager/cert-manager/app/helm/values.yaml']
-    needs: ['kube-system/spegel']
+    needs: ['kube-system/spegal']
   - name: flux-operator
     namespace: flux-system
     atomic: true
