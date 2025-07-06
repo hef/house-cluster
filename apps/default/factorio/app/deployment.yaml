@@ -22,7 +22,8 @@ spec:
     spec:
       nodeSelector:
         kubernetes.io/arch: "amd64"
-      priorityClassName: high-priority
+      # todo: implement priority class
+      # priorityClassName: high-priority
       containers:
         - name: factorio
           image: factoriotools/factorio:stable
