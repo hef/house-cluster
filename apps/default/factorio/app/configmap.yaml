@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: factorio-config
+  namespace: default
+data:
+  UPDATE_MODS_ON_START: "true"
+  LOAD_LATEST_SAVE: "false"
+  GENERATE_NEW_SAVE: "true"
+  #SAVE_NAME: "krasmap"
+  #SAVE_NAME: "space"
+  SAVE_NAME: "test01"

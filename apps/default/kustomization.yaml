@@ -7,3 +7,4 @@ components:
   - ../../components/common
 resources:
   - ./another-autoscaler/ks.yaml
+  - ./factorio/ks.yaml
