@@ -1,7 +1,67 @@
 ---
+autoDirectNodeRoutes: true
+bpf:
+  masquerade: true
+  # Ref: https://github.com/siderolabs/talos/issues/10002
+  hostLegacyRouting: true
+cni:
+  # Required for pairing with Multus CNI
+  exclusive: false
+cgroup:
+  automount:
+    enabled: false
+  hostRoot: /sys/fs/cgroup
+# NOTE: devices might need to be set if you have more than one active NIC on your hosts
+# devices: eno+ eth+
+dashboards:
+  #todo: enable
+  enabled: false
+endpointRoutes:
+  enabled: true
+envoy:
+  rollOutPods: true
+  prometheus:
+     serviceMonitor:
+       #todo: enable
+       enabled: false
+gatewayAPI:
+  enabled: true
+hubble:
+  enabled: false
 ipam:
   mode: kubernetes
+ipv4NativeRoutingCIDR: 192.168.1.0/24
+k8sServiceHost: 127.0.0.1
+k8sServicePort: 7445
 kubeProxyReplacement: true
+kubeProxyReplacementHealthzBindAddr: 0.0.0.0:10256
+l2announcements:
+  enabled: true
+loadBalancer:
+  algorithm: maglev
+  mode: dsr
+localRedirectPolicy: true
+operator:
+  dashboards:
+    #todo: enable
+    enabled: false
+  prometheus:
+    #todo: enable
+    enabled: false
+    serviceMonitor:
+      #todo: enable
+      enabled: false
+  replicas: 1
+  rollOutPods: true
+prometheus:
+  #todo enable
+  enabled: false
+  serviceMonitor:
+    #todo enable
+    enabled: false
+    trustCRDsExist: true
+rollOutCiliumPods: true
+routingMode: native
 securityContext:
   capabilities:
     ciliumAgent:
@@ -12,6 +72,8 @@ securityContext:
       - IPC_LOCK
       - SYS_ADMIN
       - SYS_RESOURCE
+      - PERFMON
+      - BPF
       - DAC_OVERRIDE
       - FOWNER
       - SETGID
@@ -20,13 +82,5 @@ securityContext:
       - NET_ADMIN
       - SYS_ADMIN
       - SYS_RESOURCE
-cgroup:
-  automount:
-    enabled: false
-  hostRoot: /sys/fs/cgroup
-k8sServiceHost: localhost
-k8sServicePort: 7445
-gatewayApi:
-  enabled: true
-  enableAlpn: true
-  enableAppProtocol: true
+socketLB:
+  hostNamespaceOnly: true
