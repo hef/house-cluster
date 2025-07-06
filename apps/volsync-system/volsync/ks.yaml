@@ -14,8 +14,8 @@ spec:
   dependsOn:
 #    - name: keda
 #      namespace: observability
-    - name: openebs
-      namespace: kube-system
+#    - name: openebs
+#      namespace: openebs-system
     - name: snapshot-controller
       namespace: kube-system
   healthChecks:
