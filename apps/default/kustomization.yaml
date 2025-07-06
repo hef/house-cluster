@@ -6,4 +6,4 @@ namespace: default
 components:
   - ../../components/common
 resources:
-  - ./cluster-autoscaler/ks.yaml
+  - ./another-autoscaler/ks.yaml
