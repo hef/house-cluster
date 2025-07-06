@@ -18,7 +18,6 @@ spec:
     metadata:
       labels:
         app: factorio
-        factorio: active
     spec:
       nodeSelector:
         kubernetes.io/arch: "amd64"

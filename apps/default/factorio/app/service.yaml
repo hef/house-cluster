@@ -5,11 +5,12 @@ metadata:
   namespace: default
   annotations:
     external-dns.alpha.kubernetes.io/hostname: factorio.${SECRET_DOMAIN}
-    io.cilium/lb-ipam-ips: 192.168.1.10
+    #io.cilium/lb-ipam-ips: 192.168.1.10
+    io.cilium/lb-ipam-ips: 192.168.1.14
 spec:
   type: LoadBalancer
   selector:
-    factorio: active
+    app: factorio
   ports:
     - name: game
       port: 34197
