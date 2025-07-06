@@ -4,8 +4,6 @@ service:
   registry:
     hostPort: 29999
 serviceMonitor:
-  #todo: enable
-  enabled: false
+  enabled: true
 grafanaDashboard:
-  #todo: enable
-  enabled: false
+  enabled: true

@@ -14,16 +14,14 @@ cgroup:
 # NOTE: devices might need to be set if you have more than one active NIC on your hosts
 # devices: eno+ eth+
 dashboards:
-  #todo: enable
-  enabled: false
+  enabled: true
 endpointRoutes:
   enabled: true
 envoy:
   rollOutPods: true
   prometheus:
      serviceMonitor:
-       #todo: enable
-       enabled: false
+       enabled: true
 gatewayAPI:
   enabled: true
 hubble:
@@ -43,22 +41,17 @@ loadBalancer:
 localRedirectPolicy: true
 operator:
   dashboards:
-    #todo: enable
-    enabled: false
+    enabled: true
   prometheus:
-    #todo: enable
-    enabled: false
+    enabled: true
     serviceMonitor:
-      #todo: enable
-      enabled: false
+      enabled: true
   replicas: 1
   rollOutPods: true
 prometheus:
-  #todo enable
-  enabled: false
+  enabled: true
   serviceMonitor:
-    #todo enable
-    enabled: false
+    enabled: true
     trustCRDsExist: true
 rollOutCiliumPods: true
 routingMode: native
