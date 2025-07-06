@@ -9,4 +9,5 @@ data:
   GENERATE_NEW_SAVE: "true"
   #SAVE_NAME: "krasmap"
   #SAVE_NAME: "space"
-  SAVE_NAME: "test01"
+  #SAVE_NAME: "test01"
+  SAVE_NAME: "wtf"
