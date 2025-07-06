@@ -14,4 +14,4 @@ spec:
     - name: game
       protocol: UDP
       port: 34197
-      targetPort: game
+      targetPort: 34197
