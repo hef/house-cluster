@@ -37,6 +37,36 @@ spec:
   values:
     scheduler:
       enabled: false
+    lvmd:
+      deviceClasses:
+        - name: ssd
+          volume-group: myvg1
+          default: true
+          spare-gb: 10
+        - name: "thin"
+          volume-group: "myvg1"
+          type: thin
+          thin-pool:
+            name: "pool0"
+            overprovision-ratio: 5.0
     controller:
       replicaCount: 1
-    
+    storageClasses:
+    - name: topolvm-provisioner  # Defines name of storage class.
+      storageClass:
+        fsType: ext4
+        reclaimPolicy:  # Delete
+        annotations: {}
+        isDefaultClass: false
+        volumeBindingMode: WaitForFirstConsumer
+        allowVolumeExpansion: true
+        additionalParameters: {}
+        mountOptions: []
+    - name: topolvm-provisioner-thin
+      storageClass:
+        fsType: ext4
+        isDefaultClass: false
+        volumeBindingMode: WaitForFirstConsumer
+        allowVolumeExpansion: true
+        additionalParameters:
+          '{{ include "topolvm.pluginName" . }}/device-class': "thin"
