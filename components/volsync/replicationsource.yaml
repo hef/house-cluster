@@ -21,6 +21,6 @@ spec:
     # point-in-time image.
     copyMethod: Snapshot
     # The StorageClass to use when creating the PiT copy (same as source PVC if omitted)
-    #storageClassName: openebs-lvm
+    #storageClassName: topolvm-provisioner
     # The VSC to use if the copy method is Snapshot (default if omitted)
-    #volumeSnapshotClassName: openebs-lvm
+    #volumeSnapshotClassName: topolvm-provisioner
