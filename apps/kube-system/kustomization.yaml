@@ -13,7 +13,7 @@ resources:
   - ./snapshot-controller/ks.yaml
 #  - ./reloader/ks.yaml
 #  - ./spegel/ks.yaml
-  - ./topolvm/ks.yaml
+#  - ./topolvm/ks.yaml
 patches:
   - target:
       kind: Namespace
