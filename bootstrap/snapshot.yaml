@@ -3,6 +3,6 @@ kind: VolumeSnapshot
 metadata:
   name: hef-data2-snap
 spec:
-  volumeSnapshotClassName: openebs-lvmpv
+  volumeSnapshotClassName: topolvm-provisioner
   source:
     persistentVolumeClaimName: hef-data2

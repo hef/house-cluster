@@ -34,6 +34,7 @@ nodes:
             type: xfs
       kernelModules:
         - name: zfs
+        - name: dm_thin_pool
       volumes:
         - name: EPHEMERAL
           provisioning:

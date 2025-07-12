@@ -21,3 +21,12 @@ spec:
       name: shell
       securityContext:
         privileged: true
+      volumeMounts:
+        - name: host
+          mountPath: /host
+  volumes:
+    - name: host
+      hostPath:
+        path: /
+        type: Directory
+    
