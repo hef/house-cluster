@@ -17,7 +17,7 @@ metadata:
   name: hef-data2
   namespace: default
 spec:
-  storageClassName: openebs-lvmpv
+  storageClassName: openebs-lvm
   resources:
     requests:
       storage: 1Gi
