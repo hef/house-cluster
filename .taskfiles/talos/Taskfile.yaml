@@ -22,6 +22,7 @@ tasks:
       - "{{.UPGRADE_CMD}}"
     vars:
       UPGRADE_CMD:
+        # todo: remove force when we get mutliple nodes
         sh: talhelper gencommand upgrade --node 192.168.1.21 --extra-flags="--timeout='10m' --force"
 
     
