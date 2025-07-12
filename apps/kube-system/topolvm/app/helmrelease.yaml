@@ -60,13 +60,7 @@ spec:
         isDefaultClass: false
         volumeBindingMode: WaitForFirstConsumer
         allowVolumeExpansion: true
-        additionalParameters: {}
+        additionalParameters: 
+        '{{ include "topolvm.pluginName" . }}/device-class': "thin"
         mountOptions: []
-    - name: topolvm-provisioner-thin
-      storageClass:
-        fsType: ext4
-        isDefaultClass: false
-        volumeBindingMode: WaitForFirstConsumer
-        allowVolumeExpansion: true
-        additionalParameters:
-          '{{ include "topolvm.pluginName" . }}/device-class': "thin"
+          

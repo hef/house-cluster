@@ -12,4 +12,4 @@ spec:
   resources:
     requests:
       storage: ${CAPACITY:-1Gi}
-  storageClassName: topolvm-provisioner-thin
+  storageClassName: topolvm-provisioner

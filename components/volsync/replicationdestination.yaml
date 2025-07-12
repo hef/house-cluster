@@ -8,7 +8,7 @@ spec:
   restic:
     repository: ${CLAIM}-backup-config
     copyMethod: Snapshot
-    volumeSnapshotClassName: topolvm-provisioner-thin
+    volumeSnapshotClassName: topolvm-provisioner
     storageClassName: topolvm-provisioner
     # these should match the restored PVC
     accessModes: ["ReadWriteOnce"]
