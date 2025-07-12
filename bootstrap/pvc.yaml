@@ -12,11 +12,27 @@ spec:
     - ReadWriteOnce
 ---
 apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: hef-data2
+  namespace: default
+spec:
+  storageClassName: openebs-lvmpv
+  resources:
+    requests:
+      storage: 1Gi
+  accessModes:
+    - ReadWriteOnce
+---
+apiVersion: v1
 kind: Pod
 metadata:
   name: hef
   namespace: default
 spec:
+  securityContext:
+    fsGroup: 1000
+    fsGroupChangePolicy: OnRootMismatch
   containers:
   - name: debian
     command: ["sleep", "infinity"]
@@ -24,8 +40,11 @@ spec:
     volumeMounts:
       - mountPath: /data
         name: hef-data
+      - mountPath: /data2
+        name: hef-data2
     securityContext:
       runAsUser: 1000
+      runAsGroup: 1000
       allowPrivilegeEscalation: false
       capabilities:
         drop: ["ALL"]
@@ -36,3 +55,6 @@ spec:
     - name: hef-data
       persistentVolumeClaim:
         claimName: hef-data
+    - name: hef-data2
+      persistentVolumeClaim:
+        claimName: hef-data2
