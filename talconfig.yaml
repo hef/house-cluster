@@ -11,7 +11,7 @@ cniConfig:
 nodes:
     - hostname: k8s-4
       controlPlane: true
-      ipAddress: 192.168.1.21
+      ipAddress: 192.168.1.22
       machineSpec:
         mode: metal
         arch: amd64
@@ -34,7 +34,7 @@ nodes:
             type: xfs
       kernelModules:
         - name: zfs
-        - name: dm_thin_pool
+        #- name: dm_thin_pool
       volumes:
         - name: EPHEMERAL
           provisioning:
