@@ -65,7 +65,7 @@ spec:
             sectionName: https
     persistence:
       config:
-        existingClaim: home-assistant
+        existingClaim: hass-config
         globalMounts:
           - path: /config
       config-cache:
