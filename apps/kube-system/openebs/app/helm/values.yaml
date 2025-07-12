@@ -18,15 +18,18 @@ engines:
       node:
         initContainers:
           enabled: false
-  zfs-localpv:
-    crds:
-      csi:
-        volumeSnapshots:
-          enabled: true
+zfs-localpv:
+  zfsNode:
+    encrKeysDir: /var/openebs/keys
+  crds:
+    csi:
+      volumeSnapshots:
+        enabled: true
 localpv-provisioner:
   localpv:
     enabled: true
     basePath: /var/mnt/openebs/local
+
 loki:
   enabled: false
   
