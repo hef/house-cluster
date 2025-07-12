@@ -13,6 +13,9 @@ spec:
     provider: sops
     secretRef:
       name: sops-age
+  dependsOn:
+    - name: snapshot-controller
+      namespace: kube-system
   interval: 1h
   path: apps/kube-system/openebs/app
   postBuild:

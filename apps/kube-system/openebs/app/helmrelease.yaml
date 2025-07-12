@@ -24,6 +24,9 @@ spec:
         kind: HelmRepository
         name: openebs
         namespace: kube-system
+  dependsOn:
+    - name: snapshot-controller
+      namespace: kube-system
   install:
     remediation:
       retries: -1
