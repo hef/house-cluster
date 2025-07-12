@@ -5,4 +5,4 @@ resources:
   - ./pvc.yaml
   - ./replicationdestination.yaml
   #- ./replicationsource.yaml
-  - ./secrets.sops.yaml
+
