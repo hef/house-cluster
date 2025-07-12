@@ -50,6 +50,7 @@ spec:
         fsGroup: 1000
         fsGroupChangePolicy: OnRootMismatch
       hostNetwork: true
+      dnsPolicy: ClusterFirstWithHostNet
     service:
       app:
         ports:
