@@ -37,6 +37,6 @@ spec:
   values:
     scheduler:
       enabled: false
-    controllers:
+    controller:
       replicaCount: 1
     
