@@ -7,7 +7,9 @@ spec:
     manual: restore-once
   restic:
     repository: ${CLAIM}-backup-config
-    copyMethod: Clone
+    #copyMethod: Snapshot
+    #copyMethod: Clone
+    copyMethod: Direct
     volumeSnapshotClassName: openebs-lvm
     storageClassName: openebs-lvm
     # these should match the restored PVC
