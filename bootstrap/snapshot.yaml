@@ -3,6 +3,6 @@ kind: VolumeSnapshot
 metadata:
   name: hef-data2-snap
 spec:
-  volumeSnapshotClassName: topolvm-provisioner
+  volumeSnapshotClassName: topolvm-provisioner-thin
   source:
     persistentVolumeClaimName: hef-data2
