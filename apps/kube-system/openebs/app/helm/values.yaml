@@ -13,7 +13,7 @@ engines:
     crds:
       csi:
         volumeSnapshots:
-          enabled: true
+          enabled: false
     csi:
       node:
         initContainers:
@@ -24,7 +24,7 @@ zfs-localpv:
   crds:
     csi:
       volumeSnapshots:
-        enabled: true
+        enabled: false
 localpv-provisioner:
   localpv:
     enabled: true
