@@ -5,8 +5,6 @@ helmDefaults:
 repositories:
   - name: cilium
     url: https://helm.cilium.io
-#  - name: openebs
-#    url: https://openebs.github.io/openebs
 
 releases:
   - name: cilium
@@ -22,13 +20,6 @@ releases:
     version: 1.43.0
     values: ["apps/kube-system/coredns/app/helm/values.yaml"]
     needs: ['kube-system/cilium']
-  #- name: openebs
-  #  namespace: kube-system
-  #  atomic: true
-  #  chart: openebs/openebs
-  #  version: 4.3.2
-  #  values: ["apps/kube-system/openebs/app/helm/values.yaml"]
-  #  needs: ['kube-system/coredns']
   - name: spegal
     namespace: kube-system
     atomic: true
