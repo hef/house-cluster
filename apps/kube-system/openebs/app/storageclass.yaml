@@ -1,9 +1,29 @@
+# Storage class for random application files
 apiVersion: storage.k8s.io/v1
 kind: StorageClass
 metadata:
-  name: openebs-lvm
+  name: host-zfs-standard
+provisioner: zfs.csi.openebs.io
 allowVolumeExpansion: true
 parameters:
-  storage: "lvm"
-  volgroup: "lvmvg"
-provisioner: local.csi.openebs.io
+  recordsize: "128k"
+  compression: "lz4"
+  dedup: "off"
+  fstype: "zfs"
+  poolname: "zfspv-pool"
+---
+# Storage class for file storage (documents, photos, videos, etc)
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: host-zfs-files
+provisioner: zfs.csi.openebs.io
+allowVolumeExpansion: true
+reclaimPolicy: Retain
+parameters:
+  recordsize: "1M"
+  compression: "lz4"
+  dedup: "off"
+  fstype: "zfs"
+  shared: "yes" # to enable ReadWriteMany access mode
+  poolname: "zfspv-pool"
