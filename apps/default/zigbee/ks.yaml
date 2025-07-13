@@ -23,6 +23,9 @@ spec:
   interval: 1h
   path: apps/default/zigbee/app
   postBuild:
+    substituteFrom:
+      - name: cluster-secrets
+        kind: Secret
     substitute:
       CLAIM: zigbee2mqtt-data
   prune: true
