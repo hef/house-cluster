@@ -14,7 +14,7 @@ spec:
     secretRef:
       name: sops-age
   interval: 1h
-  path: apps/default/another-autoscaler
+  path: apps/default/another-autoscaler/app
   postBuild:
     substituteFrom:
       - name: cluster-secrets
