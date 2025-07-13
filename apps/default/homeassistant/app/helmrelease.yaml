@@ -3,7 +3,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: mosquitto
+  name: home-assistant
 spec:
   interval: 1h
   chartRef:
@@ -18,14 +18,21 @@ spec:
       retries: 3
   values:
     controllers:
-      mosquitto:
+      home-assistant:
+        annotations:
+          reloader.stakater.com/auto: "true"
         containers:
           app:
             image:
-              repository: public.ecr.aws/docker/library/eclipse-mosquitto
-              tag: 2.0.22
+              repository: ghcr.io/home-operations/home-assistant
+              tag: 2025.7.1@sha256:5ed76e1de666b3522dcbef5d23e41283c925dd707dbcaa2fc0ecef981c0bc881
             env:
-              TZ: America/New_York
+              TZ: ${SECRET_TZ}
+              HASS_HTTP_TRUSTED_PROXY_1: 192.168.1.0/24
+              HASS_HTTP_TRUSTED_PROXY_2: 10.244.0.0/16
+            envFrom:
+              - secretRef:
+                  name: home-assistant-secret
             securityContext:
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
@@ -34,7 +41,7 @@ spec:
               requests:
                 cpu: 10m
               limits:
-                memory: 100Mi
+                memory: 2Gi
     defaultPodOptions:
       securityContext:
         runAsNonRoot: true
@@ -42,34 +49,39 @@ spec:
         runAsGroup: 1000
         fsGroup: 1000
         fsGroupChangePolicy: OnRootMismatch
+      hostNetwork: true
+      dnsPolicy: ClusterFirstWithHostNet
     service:
       app:
-        type: LoadBalancer
-        annotations:
-          external-dns.alpha.kubernetes.io/hostname: mosquitto.devbu.io
-          lbipam.cilium.io/ips: 192.168.42.129
         ports:
           http:
-            port: 1883
-    configMaps:
-      config:
-        data:
-          mosquitto.conf: |
-            allow_anonymous true
-            autosave_interval 60
-            connection_messages false
-            listener 1883
-            per_listener_settings false
-            persistence true
-            persistence_location /data
+            port: 8123
+    route:
+      app:
+        hostnames:
+          - "{{ .Release.Name }}.${SECRET_DOMAIN}"
+          - hass.${SECRET_DOMAIN}
+        parentRefs:
+          - name: internal
+            namespace: kube-system
+            sectionName: https
     persistence:
-      data:
-        existingClaim: mosquitto-cache
-      config-file:
-        type: configMap
-        name: mosquitto
+      config:
+        existingClaim: hass-config
+        globalMounts:
+          - path: /config
+      config-cache:
+        existingClaim: home-assistant-cache
+        globalMounts:
+          - path: /config/.venv
+      tmpfs:
+        type: emptyDir
         advancedMounts:
-          mosquitto:
+          home-assistant:
             app:
-              - path: /mosquitto/config/mosquitto.conf
-                subPath: mosquitto.conf
+              - path: /config/logs
+                subPath: logs
+              - path: /config/tts
+                subPath: tts
+              - path: /tmp
+                subPath: tmp
