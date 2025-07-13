@@ -10,7 +10,7 @@ spec:
     labels:
       app.kubernetes.io/name: *app
   components:
-    - ../../../components/volsync
+    - ../../../../components/volsync
   decryption:
     provider: sops
     secretRef:
@@ -19,7 +19,7 @@ spec:
     - name: openebs
       namespace: kube-system
   interval: 1h
-  path: apps/default/homeassistant
+  path: apps/default/homeassistant/app
   postBuild:
     substituteFrom:
       - name: cluster-secrets
