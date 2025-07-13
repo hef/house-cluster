@@ -8,6 +8,7 @@ components:
 resources:
   - ./another-autoscaler/ks.yaml
   - ./homeassistant/ks.yaml
+  - ./mosquitto/ks.yaml
   - ./factorio/ks.yaml
 patches:
   - target:
