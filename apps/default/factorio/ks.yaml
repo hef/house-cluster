@@ -14,7 +14,7 @@ spec:
     secretRef:
       name: sops-age
   interval: 1h
-  path: apps/default/factorio
+  path: ./apps/default/factorio/app
   postBuild:
     substituteFrom:
       - name: cluster-secrets

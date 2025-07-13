@@ -19,7 +19,7 @@ spec:
     - name: openebs
       namespace: kube-system
   interval: 1h
-  path: apps/default/homeassistant/app
+  path: ./apps/default/homeassistant/app
   postBuild:
     substituteFrom:
       - name: cluster-secrets
