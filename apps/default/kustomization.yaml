@@ -10,6 +10,7 @@ resources:
   - ./homeassistant/ks.yaml
   - ./mosquitto/ks.yaml
   - ./factorio/ks.yaml
+  - ./zigbee2mqtt/ks.yaml
 patches:
   - target:
       kind: Namespace
