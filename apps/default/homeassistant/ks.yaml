@@ -9,12 +9,13 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
+  
+  components:
+    - ../../../components/volsync
   decryption:
     provider: sops
     secretRef:
       name: sops-age
-  components:
-    - ../../../components/volsync
   dependsOn:
     - name: openebs
       namespace: kube-system
