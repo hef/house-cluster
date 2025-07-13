@@ -1,28 +1,15 @@
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: hef-data
-  namespace: default
-spec:
-  storageClassName: openebs-hostpath
-  resources:
-    requests:
-      storage: 1Gi
-  accessModes:
-    - ReadWriteOnce
----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: hef-data2
-  namespace: default
-spec:
-  storageClassName: topolvm-provisioner
-  resources:
-    requests:
-      storage: 1Gi
-  accessModes:
-    - ReadWriteOnce
+#apiVersion: v1
+#kind: PersistentVolumeClaim
+#metadata:
+#  name: hef-data
+#  namespace: default
+#spec:
+#  storageClassName: openebs-hostpath
+#  resources:
+#    requests:
+#      storage: 1Gi
+#  accessModes:
+#    - ReadWriteOnce
 ---
 apiVersion: v1
 kind: Pod
@@ -34,14 +21,12 @@ spec:
     fsGroup: 1000
     fsGroupChangePolicy: OnRootMismatch
   containers:
-  - name: debian
+  - name: netshoot
     command: ["sleep", "infinity"]
-    image: debian
+    image: nicolaka/netshoot
     volumeMounts:
       - mountPath: /data
         name: hef-data
-      - mountPath: /data2
-        name: hef-data2
     securityContext:
       runAsUser: 1000
       runAsGroup: 1000
@@ -54,7 +39,4 @@ spec:
   volumes:
     - name: hef-data
       persistentVolumeClaim:
-        claimName: hef-data
-    - name: hef-data2
-      persistentVolumeClaim:
-        claimName: hef-data2
+        claimName: zigbee2mqtt-data
