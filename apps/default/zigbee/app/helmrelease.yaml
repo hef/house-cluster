@@ -68,9 +68,9 @@ spec:
                   periodSeconds: 10
             securityContext:
               privileged: true # for usb device
-              allowPrivilegeEscalation: false
+              #allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
-              capabilities: { drop: ["ALL"] }
+              #capabilities: { drop: ["ALL"] }
             resources:
               requests:
                 cpu: 10m
