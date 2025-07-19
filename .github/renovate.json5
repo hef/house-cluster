@@ -8,8 +8,8 @@
     ":dependencyDashboard",
     ":disableRateLimiting",
     ":semanticCommits",
-    ":docker:pinDigests",
-    ":default:automergeDigest"
+    "docker:pinDigests",
+    ":automergeDigest"
   ],
   dependencyDashboard: true,
   dependencyDashboardTitle: "Renovate Dashboard 🤖",
