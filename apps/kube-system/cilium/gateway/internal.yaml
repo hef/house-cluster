@@ -5,7 +5,7 @@ kind: Gateway
 metadata:
   name: internal
   annotations:
-    external-dns.alpha.kubernetes.io/target: "internal.${SECRET_DOMAIN}"
+    external-dns.alpha.kubernetes.io/target: "internal.${SECRET_DOMAIN:=example.com}"
 spec:
   gatewayClassName: cilium
   addresses:
@@ -13,19 +13,19 @@ spec:
       value: "192.168.1.2"
   infrastructure:
     annotations:
-      external-dns.alpha.kubernetes.io/hostname: "internal.${SECRET_DOMAIN}"
+      external-dns.alpha.kubernetes.io/hostname: "internal.${SECRET_DOMAIN:=example.com}"
   listeners:
     - name: http
       protocol: HTTP
       port: 80
-      hostname: "*.${SECRET_DOMAIN}"
+      hostname: "*.${SECRET_DOMAIN:=example.com}"
       allowedRoutes:
         namespaces:
           from: Same
     - name: https
       protocol: HTTPS
       port: 443
-      hostname: "*.${SECRET_DOMAIN}"
+      hostname: "*.${SECRET_DOMAIN:=example.com}"
       allowedRoutes:
         namespaces:
           from: All
