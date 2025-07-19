@@ -32,6 +32,18 @@
   },
   packageRules: [
     {
+      "matchDatasources": [
+        "docker"
+      ],
+      "pinDigests": true
+    },
+    {
+      matchFileNames: [
+        "ocirepository.yaml"
+      ],
+      "pinDigest": false
+    },
+    {
       description: "Cert-Manager Group",
       groupName: "Cert-Manager",
       matchDatasources: ["docker"],
