@@ -46,7 +46,7 @@
   },
   packageRules: [
     {
-      matchJsonata: 'kind = "OCIRepository"',
+      matchJsonata: ['kind = "OCIRepository"'],
       pinDigest: {
         enabled: false,
       },
