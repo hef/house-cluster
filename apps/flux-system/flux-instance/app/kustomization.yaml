@@ -6,6 +6,7 @@ resources:
   - ./helmrelease.yaml
   - ./secret.sops.yaml
   - ./httproute.yaml
+  - ./ocirepository.yaml
   - ./receiver.yaml
 configMapGenerator:
   - name: flux-instance-values

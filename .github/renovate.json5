@@ -46,7 +46,9 @@
   },
   packageRules: [
     {
-      matchJsonata: ['kind = "OCIRepository"'],
+      matchFileNames: [
+        '**/ocirepository.yaml'
+      ],
       pinDigest: {
         enabled: false,
       },
