@@ -53,7 +53,7 @@
     },
     {
       matchFileNames: [
-        'ocirepository.yaml',
+        '**/ocirepository.yaml'
       ],
       pinDigest: {
         enabled: false,
