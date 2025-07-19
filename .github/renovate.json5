@@ -52,8 +52,8 @@
       pinDigests: true,
     },
     {
-      matchFileNames: [
-        '**/ocirepository.yaml'
+      matchJsonata: [
+        'kind="OCIRepository"'
       ],
       pinDigest: {
         enabled: false,
