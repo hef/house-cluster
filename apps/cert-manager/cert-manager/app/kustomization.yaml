@@ -7,6 +7,7 @@ resources:
   - ./helmrelease.yaml
   - ./ocirepository.yaml
   - ./secret.sops.yaml
+  
 configMapGenerator:
   - name: cert-manager-values
     files:
