@@ -10,6 +10,8 @@ resources:
   - ./factorio/ks.yaml
   - ./homeassistant/ks.yaml
   - ./mosquitto/ks.yaml
+  - ./openwakeword/ks.yaml
+  - ./piper/ks.yaml
   - ./whisper/ks.yaml
   - ./zigbee/ks.yaml
 patches:

@@ -1,0 +1,35 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: openwakeword
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: openwakeword
+  template:
+    metadata:
+      labels:
+        app: openwakeword
+    spec:
+      containers:
+        - name: openwakeword
+          image: rhasspy/wyoming-openwakeword:1.10.0
+          args: ["--custom-model-dir", "/data", "--debug"]
+          ports:
+            - containerPort: 10400
+          volumeMounts:
+            - name: data
+              mountPath: /data
+      volumes:
+        - name: data
+          ephemeral:
+            volumeClaimTemplate:
+              spec:
+                accessModes: ["ReadWriteOnce"]
+                resources:
+                  requests:
+                    storage: 1Gi
+                storageClassName: openebs-hostpath
