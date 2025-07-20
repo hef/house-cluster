@@ -1,6 +1,6 @@
 
 
-This setup expects an LVM2 VG called "myvg1".
+This setup expects an ZFS zpool called zfspv-pool
 
 bootstrap
 =========
