@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: piper
-          image: rhasspy/wyoming-piper:1.5.0
+          image: rhasspy/wyoming-piper:1.5.0@sha256:b6bf208855f26168790ed336ad16576b2fb290f31b51fb98aca496a45561516f
           args: ["--voice", "en-us-lessac-low"]
           ports:
             - containerPort: 10200
