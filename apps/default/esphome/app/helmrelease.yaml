@@ -17,8 +17,8 @@ spec:
     controllers:
       esphome:
         pod:
-          hostNetwork: true
-          dnsPolicy: ClusterFirstWithHostNet
+          #hostNetwork: true
+          #dnsPolicy: ClusterFirstWithHostNet
           securityContext:
             runAsUser: 1000
             runAsGroup: 1000
@@ -71,8 +71,8 @@ spec:
                 memory: 512Mi
     service:
       app:
-        annotations:
-          io.cilium/lb-ipam-ips: 192.168.1.7
+        #annotations:
+        #  io.cilium/lb-ipam-ips: 192.168.1.7
         forceRename: "{{.Release.Name}}"
         ports:
           http:
