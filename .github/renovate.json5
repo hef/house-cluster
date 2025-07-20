@@ -54,6 +54,12 @@
       },
     },
     {
+      matchManagers: ["helmfile"],
+      pinDigest: {
+        enabled: false
+      }
+    },
+    {
       description: 'Cert-Manager Group',
       groupName: 'Cert-Manager',
       matchDatasources: [
