@@ -5,9 +5,9 @@ metadata:
   namespace: default
 data:
   UPDATE_MODS_ON_START: "true"
-  LOAD_LATEST_SAVE: "false"
-  GENERATE_NEW_SAVE: "true"
+  #LOAD_LATEST_SAVE: "false"
+  #GENERATE_NEW_SAVE: "true"
   #SAVE_NAME: "krasmap"
   #SAVE_NAME: "space"
   #SAVE_NAME: "test01"
-  SAVE_NAME: "wtf"
+  #SAVE_NAME: "wtf"
