@@ -47,9 +47,9 @@ spec:
               cpu: "4"
               memory: "8Gi"
           volumeMounts:
-            - name: data
+            - name: factorio
               mountPath: /factorio
       volumes:
-        - name: data
+        - name: factorio
           persistentVolumeClaim:
-            claimName: factorio-data
+            claimName: factorio

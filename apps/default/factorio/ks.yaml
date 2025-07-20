@@ -9,6 +9,8 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
+  components:
+    - ../../../../components/volsync
   decryption:
     provider: sops
     secretRef:
@@ -19,6 +21,8 @@ spec:
     substituteFrom:
       - name: cluster-secrets
         kind: Secret
+    substitute:
+      CLAIM: *app
   prune: true
   retryInterval: 2m
   sourceRef:
