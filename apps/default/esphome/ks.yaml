@@ -16,8 +16,6 @@ spec:
     secretRef:
       name: sops-age
   dependsOn:
-    - name: esphome
-      namespace: default
     - name: openebs
       namespace: kube-system
   interval: 1h
