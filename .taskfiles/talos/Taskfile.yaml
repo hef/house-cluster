@@ -15,7 +15,7 @@ tasks:
   apply:
     desc: apply config
     cmds:
-      - talhelper gencommand apply --node 192.168.1.22 --extra-flags="--mode=reboot"
+      - talhelper gencommand apply --node 192.168.1.22 --extra-flags="--mode=reboot" | bash
   upgrade:
     desc: "Upgrade Talos"
     cmds:
@@ -23,6 +23,6 @@ tasks:
     vars:
       UPGRADE_CMD:
         # todo: remove force when we get mutliple nodes
-        sh: talhelper gencommand upgrade --node 192.168.1.22 --extra-flags="--timeout='10m' --force"
+        sh: talhelper gencommand upgrade --node 192.168.1.22 --extra-flags="--timeout='10m' --force" | bash
 
     
