@@ -24,3 +24,7 @@ spec:
     storageClassName: host-zfs-standard
     # The VSC to use if the copy method is Snapshot (default if omitted)
     volumeSnapshotClassName: host-zfs-snapshot
+    moverSecurityContext:
+      runAsUser: ${VOLSYNC_PUID:=1000}
+      runAsGroup: ${VOLSYNC_PGID:=1000}
+      fsGroup: ${VOLSYNC_PGID:=1000}
