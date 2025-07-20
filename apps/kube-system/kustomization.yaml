@@ -8,9 +8,9 @@ components:
 resources:
   - ./cilium/ks.yaml
   - ./coredns/ks.yaml
-#  - ./metrics-server/ks.yaml
+  - ./metrics-server/ks.yaml
   - ./openebs/ks.yaml
   - ./snapshot-controller/ks.yaml
-#  - ./reloader/ks.yaml
-#  - ./spegel/ks.yaml
+  - ./reloader/ks.yaml
+  - ./spegel/ks.yaml
 

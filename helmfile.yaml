@@ -20,12 +20,12 @@ releases:
     version: 1.43.0
     values: ["apps/kube-system/coredns/app/helm/values.yaml"]
     needs: ['kube-system/cilium']
-  - name: spegal
+  - name: spegel
     namespace: kube-system
     atomic: true
     chart: oci://ghcr.io/spegel-org/helm-charts/spegel
     version: 0.3.0
-    values: ['apps/kube-system/spegal/app/helm/values.yaml']
+    values: ['apps/kube-system/spegel/app/helm/values.yaml']
     needs: ['kube-system/coredns']
   - name: cert-manager
     namespace: cert-manager
@@ -33,7 +33,7 @@ releases:
     chart: oci://quay.io/jetstack/charts/cert-manager
     version: v1.18.2
     values: ['apps/cert-manager/cert-manager/app/helm/values.yaml']
-    needs: ['kube-system/spegal']
+    needs: ['kube-system/spegel']
   - name: flux-operator
     namespace: flux-system
     atomic: true
