@@ -48,8 +48,9 @@ nodes:
             maxSize: 50GiB
       patches:
         - "@./patches/local-path.yaml"
-        - "@./patches/sysctls.yaml"
+        - "@./patches/machine-network.yaml"
         - "@./patches/spegal.yaml"
+        - "@./patches/sysctls.yaml"
       schematic:
         customization:
           extraKernelArgs:
