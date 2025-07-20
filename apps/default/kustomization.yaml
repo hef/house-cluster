@@ -7,9 +7,10 @@ components:
   - ../../components/common
 resources:
   - ./another-autoscaler/ks.yaml
+  - ./factorio/ks.yaml
   - ./homeassistant/ks.yaml
   - ./mosquitto/ks.yaml
-  - ./factorio/ks.yaml
+  - ./whisper/ks.yaml
   - ./zigbee/ks.yaml
 patches:
   - target:
