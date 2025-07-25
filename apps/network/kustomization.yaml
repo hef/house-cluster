@@ -14,7 +14,6 @@ patches:
   - target:
       kind: Namespace
       name: not-used
-    # todo: move hass to a different namespace, then remove privileged from default
     patch: |-
       - op: add
         path: /metadata/labels
