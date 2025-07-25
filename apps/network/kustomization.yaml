@@ -18,4 +18,4 @@ patches:
     patch: |-
       - op: add
         path: /metadata/labels
-        values: {"pod-security.kubernetes.io/enforce": "privileged"}
+        value: {"pod-security.kubernetes.io/enforce": "privileged"}
