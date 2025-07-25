@@ -22,7 +22,7 @@ spec:
               [{
                   "name":"house",
                   "namespace": "network",
-                  "ips": ["192.168.1.7/24"],
+                  "ips": ["192.168.1.7/24"]
               }]
           securityContext:
             runAsUser: 1000
