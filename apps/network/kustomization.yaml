@@ -10,3 +10,12 @@ resources:
   - ./cloudflare-tunnel/ks.yaml
   #- ./k8s-gateway/ks.yaml
   - ./multus/ks.yaml
+patches:
+  - target:
+      kind: Namespace
+      name: not-used
+    # todo: move hass to a different namespace, then remove privileged from default
+    patch: |-
+      - op: add
+        path: /metadata/labels
+        values: {"pod-security.kubernetes.io/enforce": "privileged"}
