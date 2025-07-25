@@ -47,7 +47,9 @@
   packageRules: [
     {
       matchFileNames: [
-        '**/ocirepository.yaml'
+        '**/ocirepository.yaml',
+        'apps/flux-system/flux-instance/app/ocirepository.yaml',
+        'apps/flux-system/flux-operator/app/ocirepository.yaml'
       ],
       pinDigest: {
         enabled: false,
