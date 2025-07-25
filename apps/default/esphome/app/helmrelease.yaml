@@ -17,8 +17,13 @@ spec:
     controllers:
       esphome:
         pod:
-          #hostNetwork: true
-          #dnsPolicy: ClusterFirstWithHostNet
+          annotations:
+            k8s.v1.cni.cncf.io/networks: |
+              [{
+                  "name":"house",
+                  "namespace": "network",
+                  "ips": ["192.168.1.7/24"],
+              }]
           securityContext:
             runAsUser: 1000
             runAsGroup: 1000
