@@ -18,7 +18,7 @@ spec:
       esphome:
         pod:
           annotations:
-            k8s.v1.cni.cncf.io/networks: |
+            disable__k8s.v1.cni.cncf.io/networks: |
               [{
                   "name":"house",
                   "namespace": "network",
