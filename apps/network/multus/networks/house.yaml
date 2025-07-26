@@ -9,7 +9,7 @@ spec:
       "cniVersion": "0.3.1",
       "type": "ipvlan",
       "master": "eth0",
-      "mode": "bridge",
+      "mode": "l2",
       "ipam": {
         "type": "static",
         "subnet": "192.168.1.0/24",
