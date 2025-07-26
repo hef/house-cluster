@@ -12,15 +12,15 @@ metadata:
   namespace: hef
 spec:
   nodeName: k8s-4
-  hostIPC: true
-  hostNetwork: true
-  hostPID: true
+  #hostIPC: true
+  #hostNetwork: true
+  #hostPID: true
   containers:
     - command: ["sleep", "infinity"]
       image: debian
       name: shell
-      securityContext:
-        privileged: true
+      #securityContext:
+      #  privileged: true
       volumeMounts:
         - name: host
           mountPath: /host

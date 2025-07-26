@@ -27,16 +27,16 @@ spec:
     volumeMounts:
       - mountPath: /data
         name: hef-data
-    securityContext:
-      runAsUser: 1000
-      runAsGroup: 1000
-      allowPrivilegeEscalation: false
-      capabilities:
-        drop: ["ALL"]
-      runAsNonRoot: true  
-      seccompProfile:
-        type: RuntimeDefault
+    #securityContext:
+    #  runAsUser: 1000
+    #  runAsGroup: 1000
+    #  allowPrivilegeEscalation: false
+    #  capabilities:
+    #    drop: ["ALL"]
+    #  runAsNonRoot: true  
+    #  seccompProfile:
+    #    type: RuntimeDefault
   volumes:
     - name: hef-data
       persistentVolumeClaim:
-        claimName: zigbee2mqtt-data
+        claimName: hass-config
