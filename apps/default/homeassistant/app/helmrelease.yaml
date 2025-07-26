@@ -21,6 +21,12 @@ spec:
       home-assistant:
         annotations:
           reloader.stakater.com/auto: "true"
+          k8s.v1.cni.cncf.io/networks: |
+            [{
+                "name": "house",
+                "namespace": "network",
+                "ips": ["192.168.1.5/24"]
+            }]
         containers:
           app:
             image:
