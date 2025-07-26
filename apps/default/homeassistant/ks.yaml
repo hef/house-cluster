@@ -26,7 +26,7 @@ spec:
         kind: Secret
     substitute:
       CLAIM: hass-config
-      CAPACITY: 6Gi
+      CAPACITY: 10Gi
   prune: true
   retryInterval: 2m
   sourceRef:
