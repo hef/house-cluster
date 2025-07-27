@@ -32,5 +32,10 @@ spec:
     cleanupOnFail: true
     remediation:
       retries: 3
+  values:
+    hub:
+      db:
+        storageClassName: openebs-hostpath
+  
      
   
