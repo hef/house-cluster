@@ -8,7 +8,6 @@
     ':dependencyDashboard',
     ':disableRateLimiting',
     ':semanticCommits',
-    'docker:pinDigests',
     ':automergeDigest',
   ],
   dependencyDashboard: true,
@@ -46,19 +45,11 @@
   },
   packageRules: [
     {
-      matchFileNames: [
-        '**/ocirepository.yaml',
-        'apps/flux-system/flux-instance/app/ocirepository.yaml',
-        'apps/flux-system/flux-operator/app/ocirepository.yaml'
+      matchPackageNames: [
+        'factorio'
       ],
       pinDigest: {
-        enabled: false,
-      },
-    },
-    {
-      matchManagers: ["helmfile"],
-      pinDigest: {
-        enabled: false
+        enabled: true
       }
     },
     {
