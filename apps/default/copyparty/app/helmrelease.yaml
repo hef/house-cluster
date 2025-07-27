@@ -72,5 +72,15 @@ spec:
             app:
               - path: /cfg/accounts.conf
                 subPath: accounts.conf
+      config:
+        type: configMap
+        name: copyparty-config
+        advancedMounts:
+          app:
+            app:
+              - path: /cfg/main.conf
+                subPath: main.conf
+
+          
             
         

@@ -3,3 +3,9 @@ kind: Kustomization
 resources:
   - helmrelease.yaml
   - secret.sops.yaml
+configMapGenerator:
+  - name: copyparty-config
+    files:
+    - main.conf=./resources/main.conf
+generatorOptions:
+  disableNameSuffixHash: true
