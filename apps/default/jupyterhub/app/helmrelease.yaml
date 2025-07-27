@@ -35,7 +35,8 @@ spec:
   values:
     hub:
       db:
-        storageClassName: openebs-hostpath
+        pvc:
+          storageClassName: openebs-hostpath
   
      
   
