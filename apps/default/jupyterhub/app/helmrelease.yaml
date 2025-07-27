@@ -37,6 +37,10 @@ spec:
       db:
         pvc:
           storageClassName: openebs-hostpath
+    singleuser:
+      storage:
+        dynamic:
+          storageClass: openebs-hostpath
   
      
   
