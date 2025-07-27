@@ -57,3 +57,10 @@ spec:
     persistence:
       data:
         existingClaim: copyparty
+        advancedMounts:
+          app:
+            app:
+              - path: /w
+                subPath: /w
+              - path: /cfg
+                subPath: /cfg
