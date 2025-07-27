@@ -64,7 +64,7 @@ spec:
                 subPath: w
               - path: /cfg
                 subPath: cfg
-      accounts.conf:
+      accounts:
         type: secret
         name: copyparty-secret
         advancedMounts:
