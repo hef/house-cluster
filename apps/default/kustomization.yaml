@@ -11,6 +11,7 @@ resources:
   - ./esphome/ks.yaml
   - ./factorio/ks.yaml
   - ./homeassistant/ks.yaml
+  - ./jupyterhub/ks.yaml
   - ./mosquitto/ks.yaml
   - ./openwakeword/ks.yaml
   - ./piper/ks.yaml
