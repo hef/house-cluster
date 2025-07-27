@@ -45,8 +45,8 @@ spec:
           - path: /etc/rtlamr2mqtt.yaml
             subPath: rtlamr2mqtt.yaml
             readOnly: true
-      usb:
-        type: hostPath
-        hostPath: /dev/bus/usb
-        globalMounts:
-          - path: /dev/bus/usb
+      #usb:
+      #  type: hostPath
+      #  hostPath: /dev/bus/usb
+      #  globalMounts:
+      #    - path: /dev/bus/usb
