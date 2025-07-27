@@ -13,5 +13,6 @@ resources:
   - ./mosquitto/ks.yaml
   - ./openwakeword/ks.yaml
   - ./piper/ks.yaml
+  - ./rtlamr/ks.yaml
   - ./whisper/ks.yaml
   - ./zigbee/ks.yaml
