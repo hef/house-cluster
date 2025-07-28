@@ -49,9 +49,9 @@ spec:
     #    - name: jupyterhub
     #      persistentVolumeClaim:
     #        claimName: jupyterhub
-    #scheduling:
-    #  userScheduler:
-    #    enabled: false
+    scheduling:
+      userScheduler:
+        enabled: false
     singleuser:
       storage:
         #type: static
