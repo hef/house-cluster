@@ -45,7 +45,7 @@ spec:
         type: static
         static:
           pvcName: jupyterhub
-          subPath: "/u/{username}"
+          subPath: "u/{username}"
           
   
      
