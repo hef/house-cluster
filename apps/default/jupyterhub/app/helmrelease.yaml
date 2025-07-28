@@ -38,6 +38,7 @@ spec:
     hub:
       db:
         type: other
+        url: sqlite:///jupyterhub.sqlite
       extraVolumeMounts:
         - mountPath: /srv/jupyterhub
           name: jupyterhub
@@ -46,6 +47,9 @@ spec:
         - name: jupyterhub
           persistentVolumeClaim:
             claimName: jupyterhub
+    scheduling:
+      userScheduler:
+        enabled: false
     singleuser:
       startTimeout: 3600
       storage:
