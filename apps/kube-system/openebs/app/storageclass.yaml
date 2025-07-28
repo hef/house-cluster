@@ -10,6 +10,7 @@ parameters:
   compression: "lz4"
   dedup: "off"
   fstype: "zfs"
+  shared: "yes"
   poolname: "zfspv-pool"
 ---
 # Storage class for file storage (documents, photos, videos, etc)
