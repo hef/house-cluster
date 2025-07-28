@@ -35,8 +35,10 @@ spec:
   values:
     debug:
       enabled: true
-    #hub:
-    #  db:
+    hub:
+      db:
+        pvc:
+          storageClassName: openebs-hostpath
     #    type: other
     #    url: sqlite:///jupyterhub.sqlite
     #  extraVolumeMounts:
