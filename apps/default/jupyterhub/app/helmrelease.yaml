@@ -36,7 +36,7 @@ spec:
     hub:
       db:
         type: other
-      extraMounts:
+      extraVolumeMounts:
         - mountPath: /srv/jupyterhub
           name: pvc
           subPath: db
