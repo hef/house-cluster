@@ -40,6 +40,10 @@ spec:
         - mountPath: /srv/jupyterhub
           name: jupyterhub
           subPath: db
+      extraVolumes:
+        - name: jupyterhub
+          persistentVolumeClaim:
+            claimName: jupyterhub
     singleuser:
       storage:
         type: static
