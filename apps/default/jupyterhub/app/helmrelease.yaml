@@ -35,18 +35,18 @@ spec:
   values:
     debug:
       enabled: true
-    hub:
-      #db:
-      #  type: other
-      #  url: sqlite:///jupyterhub.sqlite
-      #extraVolumeMounts:
-      #  - mountPath: /srv/jupyterhub
-      #    name: jupyterhub
-      #    subPath: db
-      #extraVolumes:
-      #  - name: jupyterhub
-      #    persistentVolumeClaim:
-      #      claimName: jupyterhub
+    #hub:
+    #  db:
+    #    type: other
+    #    url: sqlite:///jupyterhub.sqlite
+    #  extraVolumeMounts:
+    #    - mountPath: /srv/jupyterhub
+    #      name: jupyterhub
+    #      subPath: db
+    #  extraVolumes:
+    #    - name: jupyterhub
+    #      persistentVolumeClaim:
+    #        claimName: jupyterhub
     #scheduling:
     #  userScheduler:
     #    enabled: false
