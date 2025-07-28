@@ -54,7 +54,7 @@ spec:
         enabled: false
     proxy:
       service:
-        type: ClusterIp
+        type: ClusterIP
     scheduling:
       userScheduler:
         enabled: false
