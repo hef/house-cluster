@@ -49,6 +49,9 @@ spec:
     #    - name: jupyterhub
     #      persistentVolumeClaim:
     #        claimName: jupyterhub
+    prePuller:
+      continuous:
+        enabled: false
     scheduling:
       userScheduler:
         enabled: false
