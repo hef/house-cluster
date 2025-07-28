@@ -35,12 +35,18 @@ spec:
   values:
     hub:
       db:
-        pvc:
-          storageClassName: openebs-hostpath
+        type: nil
+      extraMounts:
+        - mountPath: /srv/jupyterhub
+          name: pvc
+          subPath: db
     singleuser:
       storage:
-        dynamic:
-          storageClass: openebs-hostpath
+        type: static
+        static:
+          pvcName: jupyterhub
+          subPath: "/u/{username}"
+          
   
      
   
