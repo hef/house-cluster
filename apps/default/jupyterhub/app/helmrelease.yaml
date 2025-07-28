@@ -51,7 +51,6 @@ spec:
     #  userScheduler:
     #    enabled: false
     singleuser:
-      startTimeout: 3600
       storage:
         type: static
         static:
