@@ -33,6 +33,8 @@ spec:
     remediation:
       retries: 3
   values:
+    debug:
+      enabled: true
     hub:
       db:
         type: other
@@ -50,6 +52,7 @@ spec:
         static:
           pvcName: jupyterhub
           subPath: "u/{username}"
+          
           
   
      
