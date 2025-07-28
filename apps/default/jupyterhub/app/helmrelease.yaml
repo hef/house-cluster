@@ -35,7 +35,7 @@ spec:
   values:
     hub:
       db:
-        type: nil
+        type: other
       extraMounts:
         - mountPath: /srv/jupyterhub
           name: pvc
