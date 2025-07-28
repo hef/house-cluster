@@ -23,6 +23,7 @@ spec:
   postBuild:
     substitute:
       CLAIM: *app
+      ACCESS_MODE: ReadWriteMany
     substituteFrom:
       - name: cluster-secrets
         kind: Secret

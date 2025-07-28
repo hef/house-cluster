@@ -4,7 +4,7 @@ metadata:
   name: "${CLAIM}"
 spec:
   accessModes:
-    - ReadWriteOnce
+    - ${ACCESS_MODE:-ReadWriteOnce}
   dataSourceRef:
     apiGroup: volsync.backube
     kind: ReplicationDestination
