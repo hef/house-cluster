@@ -54,7 +54,10 @@ spec:
     #    enabled: false
     singleuser:
       storage:
-        type: static
+        #type: static
+        type: dynamic
+        dynamic:
+          storageClass: openebs-hostpath
         static:
           pvcName: jupyterhub
           subPath: "u/{username}"
