@@ -52,6 +52,9 @@ spec:
     prePuller:
       continuous:
         enabled: false
+    proxy:
+      service:
+        type: ClusterIp
     scheduling:
       userScheduler:
         enabled: false
