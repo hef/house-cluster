@@ -47,6 +47,7 @@ spec:
           persistentVolumeClaim:
             claimName: jupyterhub
     singleuser:
+      startTimeout: 3600
       storage:
         type: static
         static:
