@@ -30,7 +30,7 @@ spec:
               TZ: ${SECRET_TZ}
               SHARED_DIRECTORY: /media
             securityContext:
-              allowPrivilegeEscalation: false
+              allowPrivilegeEscalation: true
               readOnlyRootFilesystem: false
               capabilities: { add: ["SYS_ADMIN", "SETPCAP"] }
             resources:
