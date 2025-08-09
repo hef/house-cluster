@@ -16,6 +16,9 @@ spec:
   interval: 1h
   path: ./apps/observability/grafana/app
   postBuild:
+    substituteFrom:
+      - name: cluster-secrets
+        kind: Secret
     substitute:
       CLAIM: *app
   prune: true
