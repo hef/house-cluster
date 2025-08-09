@@ -27,7 +27,7 @@ spec:
               repository: itsthenetwork/nfs-server-alpine
               tag: 12
             env:
-              TZ: ${SECRET_DOMAIN}
+              TZ: ${SECRET_TZ}
               SHARED_DIRECTORY: /media
             securityContext:
               allowPrivilegeEscalation: false
