@@ -32,7 +32,7 @@ spec:
             securityContext:
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: false
-              #capabilities: { add: ["SYS_ADMIN", "SETPCAP"] }
+              capabilities: { add: ["SYS_ADMIN", "SETPCAP"] }
             resources:
               requests:
                 cpu: 100m
