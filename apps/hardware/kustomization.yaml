@@ -6,7 +6,7 @@ namespace: network
 components:
   - ../../components/common
 resources:
-  - ./zigbees/ks.yaml
+  - ./zigbee/ks.yaml
 patches:
   - target:
       kind: Namespace
