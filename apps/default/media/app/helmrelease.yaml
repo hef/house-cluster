@@ -18,20 +18,14 @@ spec:
       retries: 3
   values:
     controllers:
-      media:
+      *app :
         annotations:
           reloader.stakater.com/auto: "true"
-          zzzk8s.v1.cni.cncf.io/networks: |
-            [{
-                "name": "house",
-                "namespace": "network",
-                "ips": ["192.168.1.4/24"]
-            }]
         containers:
-          *app :
+          server:
             image:
-              repository: itsthenetwork/nfs-server-alpine
-              tag: 12
+              repository: quay.io/aminvakil/alpine-nfs-server
+              tag: latest@sha256:640999d23e9b731b61e203de4ca9cfe9f6bd39979472397f5201e7e9728fc525
             env:
               TZ: ${SECRET_TZ}
               SHARED_DIRECTORY: /media
