@@ -19,7 +19,7 @@ spec:
   values:
     controllers:
       *app :
-        strategy: RollingUpdate
+        strategy: Recreate
         pod:
           securityContext:
             runAsUser: 0
