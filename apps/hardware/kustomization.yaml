@@ -1,0 +1,17 @@
+---
+# yaml-language-server: $schema=https://json.schemastore.org/kustomization
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: network
+components:
+  - ../../components/common
+resources:
+  - ./zigbees/ks.yaml
+patches:
+  - target:
+      kind: Namespace
+      name: not-used
+    patch: |-
+      - op: add
+        path: /metadata/labels
+        value: {"pod-security.kubernetes.io/enforce": "privileged"}
