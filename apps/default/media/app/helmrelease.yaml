@@ -21,19 +21,19 @@ spec:
       *app :
         strategy: Recreate
         pod:
+          annotations:
+            reloader.stakater.com/auto: "true"
+            k8s.v1.cni.cncf.io/networks: |
+              [{
+                  "name": "house",
+                  "namespace": "network",
+                  "ips": ["192.168.1.4/24"]
+              }]
           securityContext:
             runAsUser: 0
             runAsGroup: 0
             runAsNonRoot: false
             seccompProfile: { type: RuntimeDefault }
-        annotations:
-          reloader.stakater.com/auto: "true"
-          k8s.v1.cni.cncf.io/networks: |
-            [{
-                "name": "house",
-                "namespace": "network",
-                "ips": ["192.168.1.4/24"]
-            }]
         containers:
           server:
             image:
