@@ -3,7 +3,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: media
+  name: &app media
 spec:
   interval: 1h
   chartRef:
@@ -21,29 +21,49 @@ spec:
       media:
         annotations:
           reloader.stakater.com/auto: "true"
-          k8s.v1.cni.cncf.io/networks: |
+          zzzk8s.v1.cni.cncf.io/networks: |
             [{
                 "name": "house",
                 "namespace": "network",
                 "ips": ["192.168.1.4/24"]
             }]
         containers:
-          app:
+          *app :
             image:
               repository: itsthenetwork/nfs-server-alpine
               tag: 12
             env:
               TZ: ${SECRET_TZ}
               SHARED_DIRECTORY: /media
+            probes:
+              readiness: &probes
+                enabled: true
+                custom: true
+                spec:
+                  exec:
+                    command:
+                      - sh
+                      - -c
+                      - "showmount -e localhost | grep -q \"$SHARED_DIRECTORY\""
+              liveness: *probes
             securityContext:
               allowPrivilegeEscalation: true
               readOnlyRootFilesystem: false
-              capabilities: { add: ["SYS_ADMIN", "SETPCAP"] }
+              privileged: true
+              #capabilities: { add: ["SYS_ADMIN", "SETPCAP"] }
             resources:
               requests:
                 cpu: 100m
               limits:
                 memory: 1Gi
+    service:
+      server:
+        controller: *app
+        clusterIP: 192.168.1.4
+        ports:
+          nfs:
+            port: 2049
+            protocol: TCP
     persistence:
       media:
         existingClaim: media
