@@ -21,6 +21,9 @@ spec:
   interval: 1h
   path: apps/default/jellyfin/app
   postBuild:
+    substituteFrom:
+      - name: cluster-secrets
+        kind: Secret
     substitute:
       CLAIM: *app
       VOLSYNC_CAPACITY: 10Gi
