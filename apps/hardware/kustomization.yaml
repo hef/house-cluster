@@ -6,6 +6,7 @@ namespace: hardware
 components:
   - ../../components/common
 resources:
+  - ./rtlamr/ks.yaml
   - ./zigbee/ks.yaml
 patches:
   - target:
