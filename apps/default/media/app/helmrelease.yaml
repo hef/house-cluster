@@ -1,0 +1,53 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s-labs/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: media
+spec:
+  interval: 1h
+  chartRef:
+    kind: OCIRepository
+    name: app-template
+  install:
+    remediation:
+      retries: -1
+  upgrade:
+    cleanupOnFail: true
+    remediation:
+      retries: 3
+  values:
+    controllers:
+      jellyfin:
+        annotations:
+          reloader.stakater.com/auto: "true"
+        containers:
+          app:
+            image:
+              repository: itsthenetwork/nfs-server-alpine
+              tag: 12
+            env:
+              TZ: ${SECRET_DOMAIN}
+              SHARED_DIRECTORY: /media
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities: { add: ["SYS_ADMIN", "SETPCAP"] }
+            resources:
+              requests:
+                cpu: 100m
+              limits:
+                memory: 1Gi
+    service:
+      app:
+        type: LoadBalancer
+        annotations:
+          external-dns.alpha.kubernetes.io/hostname: media.${SECRET_DOMAIN:=example.com}
+        ports:
+          nfs:
+            port: 2049
+    persistence:
+      media:
+        existingClaim: media
+        globalMounts:
+          - path: /media

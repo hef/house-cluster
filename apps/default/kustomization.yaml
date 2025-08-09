@@ -11,6 +11,7 @@ resources:
   - ./factorio/ks.yaml
   - ./homeassistant/ks.yaml
   - ./jellyfin/ks.yaml
+  - ./media/ks.yaml
   - ./mosquitto/ks.yaml
   - ./openwakeword/ks.yaml
   - ./piper/ks.yaml
