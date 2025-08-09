@@ -84,13 +84,13 @@ spec:
         existingClaim: "{{ .Release.Name }}-cache"
         globalMounts:
           - path: /config/metadata
-      media:
-        type: nfs
-        server: expanse.internal
-        path: /mnt/eros/Media
-        globalMounts:
-          - path: /media
-            readOnly: true
+      #media:
+      #  type: nfs
+      #  server: foo
+      #  path: /mnt/media
+      #  globalMounts:
+      #    - path: /media
+      #      readOnly: true
       tmpfs:
         type: emptyDir
         advancedMounts:
