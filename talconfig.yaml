@@ -62,7 +62,7 @@ nodes:
             officialExtensions:
               - siderolabs/amd-ucode
               - siderolabs/amdgpu
-              - siderolabs/nfs
+              - siderolabs/nfsd
               - siderolabs/zfs
    #- hostname: k8s-3
    #  controlPlane: false
