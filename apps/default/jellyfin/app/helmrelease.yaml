@@ -84,7 +84,10 @@ spec:
         existingClaim: "{{ .Release.Name }}-cache"
         globalMounts:
           - path: /config/metadata
-      #media:
+      media:
+        existingClaim: "media"
+        globalMounts:
+          - path: /media
       #  type: nfs
       #  server: foo
       #  path: /mnt/media
