@@ -50,7 +50,10 @@
       ],
       pinDigest: {
         enabled: true
-      }
+      }, 
+      automerge: true,
+      automergeType: 'branch',
+      ignoreTests: true,
     },
     {
       description: 'Cert-Manager Group',
