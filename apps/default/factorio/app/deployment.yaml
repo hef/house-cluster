@@ -25,7 +25,7 @@ spec:
       # priorityClassName: high-priority
       containers:
         - name: factorio
-          image: factoriotools/factorio:stable@sha256:e31b5cdecd7c96f25b62efae077ec86b99085e2e30e9678f3d69e975fe0811b6
+          image: factoriotools/factorio:stable@sha256:7204a26e41aca315e8e5163adca5636c8f74ea52cf2085d4a67ec3db6021281d
           imagePullPolicy: Always
           ports:
             - containerPort: 34197
