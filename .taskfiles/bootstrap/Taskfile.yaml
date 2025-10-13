@@ -19,7 +19,7 @@ tasks:
       - until {{.KUBECONFIG_CMD}} do sleep 10; done
       - until kubectl version; do sleep 10; done
         # renovate: datasource=github-releases depName=prometheus-operator/prometheus-operator
-      - kubectl apply --server-side --filename https://github.com/prometheus-operator/prometheus-operator/releases/download/v0.85.0/stripped-down-crds.yaml
+      - kubectl apply --server-side --filename https://github.com/prometheus-operator/prometheus-operator/releases/download/v0.86.0/stripped-down-crds.yaml
       - helmfile -f helmfile.yaml sync
       - sops exec-file components/common/sops.sops.yaml "kubectl --namespace flux-system apply --server-side --filename {}"
         # renovate: datasource=github-releases depName=kubernetes-sigs/external-dns
