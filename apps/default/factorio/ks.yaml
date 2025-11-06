@@ -23,6 +23,7 @@ spec:
         kind: Secret
     substitute:
       CLAIM: *app
+      CAPACITY: 10Gi
   prune: true
   retryInterval: 2m
   sourceRef:
