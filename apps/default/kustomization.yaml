@@ -16,4 +16,4 @@ resources:
   - ./openwakeword/ks.yaml
   - ./piper/ks.yaml
   - ./whisper/ks.yaml
-  - ./zigbee/ks.yaml
+ #- ./zigbee/ks.yaml
