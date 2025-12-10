@@ -23,7 +23,7 @@ tasks:
       - helmfile -f helmfile.yaml sync
       - sops exec-file components/common/sops.sops.yaml "kubectl --namespace flux-system apply --server-side --filename {}"
         # renovate: datasource=github-releases depName=kubernetes-sigs/external-dns
-      - kubectl apply --server-side --filename https://raw.githubusercontent.com/kubernetes-sigs/external-dns/refs/tags/v0.19.0/config/crd/standard/dnsendpoints.externaldns.k8s.io.yaml
+      - kubectl apply --server-side --filename https://raw.githubusercontent.com/kubernetes-sigs/external-dns/refs/tags/v0.20.0/config/crd/standard/dnsendpoints.externaldns.k8s.io.yaml
         # renovate: datasource=github-releases depName=kubernetes-sigs/gateway-api
       - kubectl apply --server-side --filename https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.4.0/experimental-install.yaml
       
