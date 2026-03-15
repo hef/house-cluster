@@ -22,7 +22,7 @@ spec:
         containers:
           server:
             image:
-              repository: docker pull ghcr.io/hef/ipns-sw
+              repository: ghcr.io/hef/ipns-sw
               tag: 1.1.0
             env:
               TZ: ${SECRET_TZ}
