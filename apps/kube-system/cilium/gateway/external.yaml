@@ -33,3 +33,14 @@ spec:
         certificateRefs:
           - kind: Secret
             name: ${SECRET_DOMAIN/./-}-production-tls
+    - name: https-apex
+      protocol: HTTPS
+      port: 443
+      hostname: "${SECRET_DOMAIN:=example.com}"
+      allowedRoutes:
+        namespaces:
+          from: All
+      tls:
+        certificateRefs:
+          - kind: Secret
+            name: ${SECRET_DOMAIN/./-}-production-tls
