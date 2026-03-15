@@ -13,15 +13,13 @@ spec:
     provider: sops
     secretRef:
       name: sops-age
-  dependsOn:
-    - name: openebs
-      namespace: kube-system
   interval: 1h
   path: apps/default/mainsite/app
   postBuild:
     substituteFrom:
       - name: cluster-secrets
-        kind: Secret  prune: true
+        kind: Secret
+  prune: true
   retryInterval: 2m
   sourceRef:
     kind: GitRepository
