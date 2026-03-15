@@ -46,6 +46,3 @@ spec:
           - name: external
             namespace: kube-system
             sectionName: https-apex
-          - name: external
-            namespace: kube-system
-            sectionName: http-apex
