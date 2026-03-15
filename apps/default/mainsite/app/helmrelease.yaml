@@ -41,6 +41,6 @@ spec:
         hostnames:
           - "${SECRET_DOMAIN:=example.com}"
         parentRefs:
-          - name: internal
+          - name: external
             namespace: kube-system
             sectionName: https
