@@ -42,7 +42,11 @@ spec:
       app:
         hostnames:
           - "${SECRET_DOMAIN:=example.com}"
+          - "external.${SECRET_DOMAIN:=example.com}"
         parentRefs:
           - name: external
             namespace: kube-system
             sectionName: https-apex
+          - name: external
+            namespace: kube-system
+            sectionName: https
