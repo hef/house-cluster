@@ -6,8 +6,9 @@ ingress:
   - hostname: "${SECRET_DOMAIN}"
     service: &svc https://cilium-gateway-external.kube-system.svc.cluster.local
     originRequest:
-      httpHostHeader: "${SECRET_DOMAIN:=example.com}"
-      originServerName: "${SECRET_DOMAIN:=example.com}"
+      originServerName: "${SECRET_DOMAIN}"
+      matchSNItoHost: true
+      httpHostHeader: "${SECRET_DOMAIN}"
   - hostname: "*.${SECRET_DOMAIN:=example.com}"
     service: *svc
   - service: http_status:404
