@@ -1,14 +1,12 @@
 ---
-originRequest:
-  originServerName: "external.${SECRET_DOMAIN:=example.com}"
-
 ingress:
   - hostname: "${SECRET_DOMAIN}"
     service: https://cilium-gateway-external.kube-system.svc.cluster.local
     originRequest:
       originServerName: "${SECRET_DOMAIN}"
-      matchSNItoHost: true
       httpHostHeader: "${SECRET_DOMAIN}"
   - hostname: "*.${SECRET_DOMAIN:=example.com}"
     service: https://cilium-gateway-external.kube-system.svc.cluster.local
+    originRequest:
+      originServerName: "external.${SECRET_DOMAIN:=example.com}"
   - service: http_status:404
