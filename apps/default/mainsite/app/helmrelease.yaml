@@ -23,7 +23,7 @@ spec:
           server:
             image:
               repository: ghcr.io/hef/ipns-sw
-              tag: 1.2.1
+              tag: 1.3.0
             env:
               TZ: ${SECRET_TZ}
             resources:
