@@ -23,22 +23,24 @@ spec:
               args:
                 - |
                   TOKEN=$(cat /var/run/secrets/kubernetes.io/serviceaccount/token)
-                  NAMESPACE=$(cat /var/run/secrets/kubernetes.io/serviceaccount/namespace)
                   CA=/var/run/secrets/kubernetes.io/serviceaccount/ca.crt
                   API="https://kubernetes.default.svc"
 
-                  SECRETS=$(curl -s --cacert "$CA" -H "Authorization: Bearer $TOKEN" \
-                    "$API/api/v1/namespaces/$NAMESPACE/secrets" | \
-                    python3 -c "import json,sys; d=json.load(sys.stdin); [print(i['metadata']['name']) for i in d.get('items',[]) if i['metadata']['name'].endswith('-backup-config')]")
+                  # Query backup-config secrets across all namespaces
+                  ENTRIES=$(curl -s --cacert "$CA" -H "Authorization: Bearer $TOKEN" \
+                    "$API/api/v1/secrets" | \
+                    python3 -c "import json,sys; d=json.load(sys.stdin); [print(i['metadata']['namespace']+'/'+i['metadata']['name']) for i in d.get('items',[]) if i['metadata']['name'].endswith('-backup-config')]")
 
-                  for SECRET in $SECRETS; do
-                    echo "=== Processing $SECRET ==="
+                  for ENTRY in $ENTRIES; do
+                    NS=$(echo "$ENTRY" | cut -d/ -f1)
+                    SECRET=$(echo "$ENTRY" | cut -d/ -f2)
+                    echo "=== Processing $NS/$SECRET ==="
                     # Derive the ReplicationSource name (secret is <name>-config)
                     RS_NAME=$(echo "$SECRET" | sed 's/-config$//')
 
                     # Check if a volsync mover pod is currently running for this backup
                     RUNNING=$(curl -s --cacert "$CA" -H "Authorization: Bearer $TOKEN" \
-                      "$API/api/v1/namespaces/$NAMESPACE/pods" | \
+                      "$API/api/v1/namespaces/$NS/pods" | \
                       python3 -c "
                   import json,sys
                   pods=json.load(sys.stdin).get('items',[])
@@ -57,7 +59,7 @@ spec:
                     fi
 
                     eval "$(curl -s --cacert "$CA" -H "Authorization: Bearer $TOKEN" \
-                      "$API/api/v1/namespaces/$NAMESPACE/secrets/$SECRET" | \
+                      "$API/api/v1/namespaces/$NS/secrets/$SECRET" | \
                       python3 -c "
                   import json,sys,base64
                   d=json.load(sys.stdin)['data']
