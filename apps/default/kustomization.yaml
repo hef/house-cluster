@@ -10,11 +10,13 @@ resources:
   - ./esphome/ks.yaml
   - ./factorio/ks.yaml
   - ./homeassistant/ks.yaml
+  - ./house-db/ks.yaml
   - ./jellyfin/ks.yaml
   - ./mainsite/ks.yaml
   - ./media/ks.yaml
   - ./mosquitto/ks.yaml
   - ./openwakeword/ks.yaml
+  - ./pgadmin/ks.yaml
   - ./piper/ks.yaml
   - ./whisper/ks.yaml
   - ./zigbee/ks.yaml

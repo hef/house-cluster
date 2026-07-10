@@ -1,0 +1,12 @@
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: house-db-server-cert
+spec:
+  secretName: house-db-server-cert
+  issuerRef:
+    name: letsencrypt-production
+    kind: ClusterIssuer
+  dnsNames:
+    - house-db.${SECRET_DOMAIN:=example.com}

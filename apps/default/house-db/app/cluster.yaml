@@ -1,0 +1,20 @@
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: house-db
+spec:
+  instances: 3
+  primaryUpdateStrategy: unsupervised
+  storage:
+    size: 10Gi
+    storageClass: host-zfs-standard
+  postgresql:
+    parameters:
+      max_connections: "100"
+      shared_buffers: 256MB
+  certificates:
+    serverTLSSecret: house-db-server-cert
+    serverCASecret: house-db-server-cert
+  monitoring:
+    enablePodMonitor: false

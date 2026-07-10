@@ -1,0 +1,21 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: pgadmin-servers
+data:
+  servers.json: |
+    {
+      "Servers": {
+        "1": {
+          "Name": "house-db",
+          "Group": "Servers",
+          "Host": "house-db-rw.default.svc.cluster.local",
+          "Port": 5432,
+          "MaintenanceDB": "app",
+          "Username": "app",
+          "SSLMode": "prefer",
+          "Comment": "CNPG house-db cluster (primary)"
+        }
+      }
+    }
