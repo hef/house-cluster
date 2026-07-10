@@ -13,8 +13,5 @@ spec:
     parameters:
       max_connections: "100"
       shared_buffers: 256MB
-  certificates:
-    serverTLSSecret: house-db-server-cert
-    serverCASecret: house-db-server-cert
   monitoring:
     enablePodMonitor: false
