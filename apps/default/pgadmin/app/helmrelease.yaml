@@ -30,7 +30,7 @@ spec:
               PGADMIN_CONFIG_SERVER_MODE: "True"
               PGADMIN_CONFIG_ENHANCED_COOKIE_PROTECTION: "False"
             securityContext:
-              allowPrivilegeEscalation: false
+              allowPrivilegeEscalation: true
               capabilities: { drop: ["ALL"] }
             resources:
               requests:
