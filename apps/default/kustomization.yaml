@@ -18,5 +18,5 @@ resources:
   - ./openwakeword/ks.yaml
   - ./pgadmin/ks.yaml
   - ./piper/ks.yaml
+  - ./volsync-unlock/ks.yaml
   - ./whisper/ks.yaml
-  - ./zigbee/ks.yaml

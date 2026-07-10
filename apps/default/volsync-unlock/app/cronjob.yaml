@@ -1,0 +1,78 @@
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: volsync-unlock
+spec:
+  schedule: "30 1,5,9,13,17,21 * * *"
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 1
+  failedJobsHistoryLimit: 3
+  jobTemplate:
+    spec:
+      backoffLimit: 1
+      activeDeadlineSeconds: 600
+      template:
+        spec:
+          serviceAccountName: volsync-unlock
+          restartPolicy: OnFailure
+          containers:
+            - name: unlock
+              image: quay.io/backube/volsync:0.13.0-rc.2
+              command: ["/bin/sh", "-c"]
+              args:
+                - |
+                  TOKEN=$(cat /var/run/secrets/kubernetes.io/serviceaccount/token)
+                  NAMESPACE=$(cat /var/run/secrets/kubernetes.io/serviceaccount/namespace)
+                  CA=/var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+                  API="https://kubernetes.default.svc"
+
+                  SECRETS=$(curl -s --cacert "$CA" -H "Authorization: Bearer $TOKEN" \
+                    "$API/api/v1/namespaces/$NAMESPACE/secrets" | \
+                    python3 -c "import json,sys; d=json.load(sys.stdin); [print(i['metadata']['name']) for i in d.get('items',[]) if i['metadata']['name'].endswith('-backup-config')]")
+
+                  for SECRET in $SECRETS; do
+                    echo "=== Processing $SECRET ==="
+                    # Derive the ReplicationSource name (secret is <name>-config)
+                    RS_NAME=$(echo "$SECRET" | sed 's/-config$//')
+
+                    # Check if a volsync mover pod is currently running for this backup
+                    RUNNING=$(curl -s --cacert "$CA" -H "Authorization: Bearer $TOKEN" \
+                      "$API/api/v1/namespaces/$NAMESPACE/pods" | \
+                      python3 -c "
+                  import json,sys
+                  pods=json.load(sys.stdin).get('items',[])
+                  name='volsync-src-${RS_NAME}'
+                  for p in pods:
+                      pname=p['metadata']['name']
+                      phase=p['status'].get('phase','')
+                      if pname.startswith(name) and phase=='Running':
+                          print(pname)
+                  " 2>/dev/null)
+
+                    if [ -n "$RUNNING" ]; then
+                      echo "SKIPPING: backup in progress ($RUNNING)"
+                      echo ""
+                      continue
+                    fi
+
+                    eval "$(curl -s --cacert "$CA" -H "Authorization: Bearer $TOKEN" \
+                      "$API/api/v1/namespaces/$NAMESPACE/secrets/$SECRET" | \
+                      python3 -c "
+                  import json,sys,base64
+                  d=json.load(sys.stdin)['data']
+                  for k in ['RESTIC_REPOSITORY','RESTIC_PASSWORD','AWS_ACCESS_KEY_ID','AWS_SECRET_ACCESS_KEY']:
+                      v=base64.b64decode(d[k]).decode()
+                      print(f'export {k}=\"{v}\"')
+                  ")"
+
+                    restic unlock --remove-all --no-cache 2>&1 || true
+                    echo ""
+                  done
+                  echo "Done."
+              resources:
+                requests:
+                  cpu: 10m
+                  memory: 64Mi
+                limits:
+                  memory: 128Mi

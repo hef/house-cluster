@@ -21,7 +21,7 @@ task talos:apply
 # Upgrade Talos on the node
 task talos:upgrade
 
-# Bootstrap a fresh cluster (full sequence: generate config → apply → bootstrap etcd → get kubeconfig → install CRDs → helmfile → flux)
+# Bootstrap a fresh cluster (full sequence: generate config → apply → bootstrap etcd → get kubeconfig → install prometheus-operator CRDs → helmfile (installs Flux) → apply SOPS secret → install external-dns/gateway-api CRDs)
 task bootstrap:talos
 
 # Reset the cluster back to maintenance mode

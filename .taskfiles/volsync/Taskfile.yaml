@@ -1,0 +1,13 @@
+version: 3
+
+tasks:
+  delete-cache-pvcs:
+    desc: Delete all volsync cache PVCs so they get recreated with correct ownership
+    cmds:
+      - kubectl get pvc -A -o custom-columns='NAMESPACE:.metadata.namespace,NAME:.metadata.name' --no-headers | grep 'volsync-.*-cache' | while read ns name; do echo "Deleting $ns/$name"; kubectl delete pvc -n "$ns" "$name"; done
+
+  unlock:
+    desc: Remove all stale restic locks from volsync backup repositories
+    cmds:
+      - kubectl create job --from=cronjob/volsync-unlock volsync-unlock-manual -n default
+      - echo "Job created. Watch with: kubectl logs -f job/volsync-unlock-manual -n default"

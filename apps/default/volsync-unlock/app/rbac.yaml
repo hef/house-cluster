@@ -1,0 +1,29 @@
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: volsync-unlock
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: volsync-unlock
+rules:
+  - apiGroups: [""]
+    resources: ["secrets"]
+    verbs: ["list", "get"]
+  - apiGroups: [""]
+    resources: ["pods"]
+    verbs: ["list"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: volsync-unlock
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: volsync-unlock
+subjects:
+  - kind: ServiceAccount
+    name: volsync-unlock
