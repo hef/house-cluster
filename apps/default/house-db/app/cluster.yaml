@@ -19,5 +19,21 @@ spec:
       database: app
       owner: app
       postInitApplicationSQL: []
+  backup:
+    barmanObjectStore:
+      destinationPath: s3://hef-restic/cnpg/house-db
+      endpointURL: https://s3.us-west-004.backblazeb2.com
+      s3Credentials:
+        accessKeyId:
+          name: house-db-backup-creds
+          key: ACCESS_KEY_ID
+        secretAccessKey:
+          name: house-db-backup-creds
+          key: ACCESS_SECRET_KEY
+      wal:
+        compression: gzip
+      data:
+        compression: gzip
+    retentionPolicy: "30d"
   monitoring:
     enablePodMonitor: false
