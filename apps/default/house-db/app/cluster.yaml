@@ -9,11 +9,12 @@ spec:
   primaryUpdateStrategy: unsupervised
   storage:
     size: 10Gi
-    storageClass: host-zfs-standard
+    storageClass: host-zfs-postgres
   postgresql:
     parameters:
       max_connections: "100"
       shared_buffers: 256MB
+      full_page_writes: "off"
   bootstrap:
     initdb:
       database: app
