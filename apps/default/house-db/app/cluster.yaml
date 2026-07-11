@@ -13,5 +13,10 @@ spec:
     parameters:
       max_connections: "100"
       shared_buffers: 256MB
+  bootstrap:
+    initdb:
+      database: app
+      owner: app
+      postInitApplicationSQL: []
   monitoring:
     enablePodMonitor: false

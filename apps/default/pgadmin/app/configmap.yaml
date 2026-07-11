@@ -12,8 +12,8 @@ data:
           "Group": "Servers",
           "Host": "house-db-rw.default.svc.cluster.local",
           "Port": 5432,
-          "MaintenanceDB": "app",
-          "Username": "app",
+          "MaintenanceDB": "postgres",
+          "Username": "postgres",
           "SSLMode": "prefer",
           "Comment": "CNPG house-db cluster (primary)"
         }
