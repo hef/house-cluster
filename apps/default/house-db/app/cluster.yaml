@@ -37,5 +37,6 @@ spec:
     retentionPolicy: "360d"
   certificates:
     serverTLSSecret: house-db-server-cert
+    serverCASecret: house-db-server-ca
   monitoring:
     enablePodMonitor: false
