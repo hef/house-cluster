@@ -117,6 +117,40 @@ kubectl get cluster house-db-restore -n default \
 kubectl cnpg backup house-db-restore -n default --method plugin
 ```
 
+## Ad-hoc / manual backup
+
+To take an on-demand backup outside the monthly `ScheduledBackup`, create a
+`Backup` object. With the plugin, `spec.pluginConfiguration` is **required** —
+CNPG rejects a plugin-method `Backup` with an empty `pluginConfiguration`
+(`spec.pluginConfiguration ... cannot be empty when the backup method is plugin`):
+
+```yaml
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: Backup
+metadata:
+  name: house-db-manual
+  namespace: default
+spec:
+  method: plugin
+  pluginConfiguration:
+    name: barman-cloud.cloudnative-pg.io
+  cluster:
+    name: house-db
+```
+
+Then watch it complete and confirm it wrote to Backblaze:
+
+```bash
+export KUBECONFIG=./kubeconfig
+kubectl get backup house-db-manual -n default \
+  -o jsonpath='phase={.status.phase} method={.spec.method} error={.status.error} online={.status.online}{"\n"}'
+```
+
+A healthy run reports `phase=completed`, `online=true`, and an empty `error`.
+The equivalent `kubectl cnpg` shortcut is
+`kubectl cnpg backup house-db -n default --method plugin`.
+
 ## Full-cluster bootstrap ordering
 
 On a from-scratch `task bootstrap:talos`, Flux brings these up in dependency
