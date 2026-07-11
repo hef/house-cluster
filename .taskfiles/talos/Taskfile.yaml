@@ -1,12 +1,11 @@
 version: '3'
 
-vars:
-  RESET_CMD:
-    sh: talhelper gencommand reset --extra-flags="--reboot --system-labels-to-wipe STATE --system-labels-to-wipe EPHEMERAL --graceful=false --wait=false"
-
 tasks:
   reset:
     desc: reset cluster back to maitinance mode
+    vars:
+      RESET_CMD:
+        sh: talhelper gencommand reset --extra-flags="--reboot --system-labels-to-wipe STATE --system-labels-to-wipe EPHEMERAL --graceful=false --wait=false"
     cmds:
      - "{{.RESET_CMD}}"
   genconfig:

@@ -1,17 +1,16 @@
 version: 3
 
-vars:
-  APPLY_CMD:
-    # todo: for initial install from iso/flash drive, insecure makes it not work
-    sh: talhelper gencommand apply --extra-flags="--insecure"
-  BOOTSTRAP_CMD:
-    sh: talhelper gencommand bootstrap
-  KUBECONFIG_CMD:
-    sh: talhelper gencommand kubeconfig --extra-flags="{{.ROOT_DIR}} --force"
-  
 tasks:
   talos:
     desc: Bootstrap the Talos cluster
+    vars:
+      APPLY_CMD:
+        # todo: for initial install from iso/flash drive, insecure makes it not work
+        sh: talhelper gencommand apply --extra-flags="--insecure"
+      BOOTSTRAP_CMD:
+        sh: talhelper gencommand bootstrap
+      KUBECONFIG_CMD:
+        sh: talhelper gencommand kubeconfig --extra-flags="{{.ROOT_DIR}} --force"
     cmds:
       - talhelper genconfig
       - until {{.APPLY_CMD}} do sleep 10; done
