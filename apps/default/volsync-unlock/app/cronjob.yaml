@@ -18,7 +18,7 @@ spec:
           restartPolicy: OnFailure
           containers:
             - name: unlock
-              image: quay.io/backube/volsync:0.13.0-rc.2
+              image: quay.io/backube/volsync:0.16.0
               command: ["/bin/sh", "-c"]
               args:
                 - |
