@@ -6,6 +6,7 @@ resources:
   - ./bundle.yaml
   - ./certificate.yaml
   - ./cluster.yaml
+  - ./objectstore.yaml
   - ./grafana-db-secret.sops.yaml
   - ./scheduledbackup.yaml
   - ./secret.sops.yaml

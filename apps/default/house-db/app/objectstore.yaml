@@ -1,0 +1,21 @@
+---
+apiVersion: barmancloud.cnpg.io/v1
+kind: ObjectStore
+metadata:
+  name: house-db
+spec:
+  retentionPolicy: "360d"
+  configuration:
+    destinationPath: s3://hef-restic/cnpg/house-db
+    endpointURL: https://s3.us-west-004.backblazeb2.com
+    s3Credentials:
+      accessKeyId:
+        name: house-db-backup-creds
+        key: ACCESS_KEY_ID
+      secretAccessKey:
+        name: house-db-backup-creds
+        key: ACCESS_SECRET_KEY
+    wal:
+      compression: gzip
+    data:
+      compression: gzip

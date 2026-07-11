@@ -6,5 +6,6 @@ metadata:
 spec:
   schedule: "0 0 1 * *"
   backupOwnerReference: self
+  method: plugin
   cluster:
     name: house-db
