@@ -8,3 +8,7 @@ tasks:
     desc: Connect to house-db via psql using the superuser password
     cmds:
       - PGPASSWORD=$(kubectl --kubeconfig=./kubeconfig get secret house-db-superuser -n default -o jsonpath='{.data.password}' | base64 -d) psql -h house-db.$(kubectl --kubeconfig=./kubeconfig get secret cluster-secrets -n default -o jsonpath='{.data.SECRET_DOMAIN}' | base64 -d) -U postgres -d postgres
+  psql-grafana:
+    desc: Connect to house-db app database via psql as the grafana user
+    cmds:
+      - PGPASSWORD=$(sops -d apps/default/house-db/app/grafana-db-secret.sops.yaml | yq '.stringData.password') psql -h house-db.$(kubectl --kubeconfig=./kubeconfig get secret cluster-secrets -n default -o jsonpath='{.data.SECRET_DOMAIN}' | base64 -d) -U grafana -d app
