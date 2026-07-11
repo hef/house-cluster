@@ -1,6 +1,6 @@
-# CLAUDE.md
+# AGENTS.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+This file provides guidance to AI coding agents when working with code in this repository.
 
 ## Overview
 
@@ -26,6 +26,12 @@ task bootstrap:talos
 
 # Reset the cluster back to maintenance mode
 task talos:reset
+
+# Connect to house-db via psql as the postgres superuser
+task cnpg:psql
+
+# Connect to the house-db app database via psql as the grafana user
+task cnpg:psql-grafana
 ```
 
 ## Architecture
@@ -49,6 +55,7 @@ There are two layers of cluster setup:
 - `clusterconfig/` — Generated Talos configs (git-ignored except the talosconfig file).
 - `helmfile.yaml` — Bootstrap-only helm chart installs.
 - `talconfig.yaml` — Node definitions and schematic for `talhelper`.
+- `.taskfiles/` — Task definitions grouped by domain (bootstrap, cnpg, grafana, talos, volsync), included from the root `Taskfile.yaml`.
 
 ### How a New App Is Added
 
