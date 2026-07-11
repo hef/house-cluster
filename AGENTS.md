@@ -99,6 +99,7 @@ Flux variable substitution (`postBuild.substituteFrom`) pulls values from the `c
 - **Volsync**: PVC backups via Restic to an external repository. Apps opt in by including `components/volsync` and providing a `${CLAIM}-backup-config` Secret.
 - **Snapshot**: `host-zfs-snapshot` VolumeSnapshotClass used by Volsync for point-in-time copies.
 - **Volsync maintenance**: Use `task volsync:unlock` to clear stale restic locks and `task volsync:delete-cache-pvcs` to recreate cache PVCs with correct ownership.
+- **house-db backups**: The `house-db` CloudNativePG cluster backs up to Backblaze B2 via the Barman Cloud Plugin (`apps/cnpg-system/barman-cloud` + the `ObjectStore` in `apps/default/house-db/app/objectstore.yaml`). See `apps/default/house-db/RECOVERY.md` for the restore / point-in-time-recovery runbook.
 
 ### CI
 
