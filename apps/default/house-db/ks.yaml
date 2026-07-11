@@ -14,6 +14,8 @@ spec:
       namespace: cnpg-system
     - name: openebs
       namespace: kube-system
+    - name: trust-manager
+      namespace: cert-manager
   interval: 1h
   path: ./apps/default/house-db/app
   postBuild:
