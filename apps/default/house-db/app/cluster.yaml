@@ -34,7 +34,7 @@ spec:
         compression: gzip
       data:
         compression: gzip
-    retentionPolicy: "30d"
+    retentionPolicy: "360d"
   certificates:
     serverTLSSecret: house-db-server-cert
   monitoring:
