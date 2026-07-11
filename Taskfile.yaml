@@ -1,6 +1,7 @@
 version: 3
 includes:
   bootstrap: .taskfiles/bootstrap
+  cnpg: .taskfiles/cnpg
   talos: .taskfiles/talos
   volsync: .taskfiles/volsync
 tasks:

@@ -1,0 +1,6 @@
+version: 3
+tasks:
+  password:
+    desc: Get the postgres superuser password for house-db
+    cmds:
+      - kubectl --kubeconfig=./kubeconfig get secret house-db-superuser -n default -o jsonpath='{.data.password}' | base64 -d && echo
