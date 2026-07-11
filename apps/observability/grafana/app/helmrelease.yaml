@@ -35,6 +35,9 @@ spec:
       type: Recreate
     admin:
       existingSecret: grafana-admin-secret
+    envFromSecrets:
+      - name: grafana-db-secret
+        optional: false
     env:
       GF_DATE_FORMATS_USE_BROWSER_LOCALE: true
       GF_EXPLORE_ENABLED: true
@@ -58,6 +61,7 @@ spec:
         apiVersion: 1
         deleteDatasources:
           - { name: Alertmanager, orgId: 1 }
+          - { name: House DB, orgId: 1 }
           - { name: Loki, orgId: 1 }
           - { name: Prometheus, orgId: 1 }
         datasources:
@@ -81,6 +85,18 @@ spec:
             url: http://alertmanager-operated.observability.svc.cluster.local:9093
             jsonData:
               implementation: prometheus
+          - name: House DB
+            type: postgres
+            uid: house-db
+            access: proxy
+            url: house-db-ro.default.svc.cluster.local:5432
+            user: grafana
+            jsonData:
+              database: app
+              sslmode: require
+              postgresVersion: 1700
+            secureJsonData:
+              password: $__env{GF_DATASOURCE_HOUSE_DB_PASSWORD}
     dashboardProviders:
       dashboardproviders.yaml:
         apiVersion: 1

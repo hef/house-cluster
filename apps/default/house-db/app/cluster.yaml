@@ -18,7 +18,11 @@ spec:
     initdb:
       database: app
       owner: app
-      postInitApplicationSQL: []
+      postInitApplicationSQL:
+        - GRANT CONNECT ON DATABASE app TO grafana
+        - GRANT USAGE ON SCHEMA public TO grafana
+        - GRANT SELECT ON ALL TABLES IN SCHEMA public TO grafana
+        - ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT SELECT ON TABLES TO grafana
   backup:
     barmanObjectStore:
       destinationPath: s3://hef-restic/cnpg/house-db
@@ -38,5 +42,16 @@ spec:
   certificates:
     serverTLSSecret: house-db-server-cert
     serverCASecret: house-db-server-ca
+  managed:
+    roles:
+      - name: grafana
+        ensure: present
+        login: true
+        superuser: false
+        createdb: false
+        createrole: false
+        inherit: true
+        passwordSecret:
+          name: grafana-db-secret
   monitoring:
     enablePodMonitor: false
