@@ -27,11 +27,23 @@ task bootstrap:talos
 # Reset the cluster back to maintenance mode
 task talos:reset
 
+# Print the postgres superuser password for house-db
+task cnpg:password
+
 # Connect to house-db via psql as the postgres superuser
 task cnpg:psql
 
 # Connect to the house-db app database via psql as the grafana user
 task cnpg:psql-grafana
+
+# Update the Grafana admin password in both the SOPS secret and the live cluster
+task grafana:update-password
+
+# Remove stale restic locks from volsync backup repositories
+task volsync:unlock
+
+# Delete all volsync cache PVCs so they get recreated with correct ownership
+task volsync:delete-cache-pvcs
 ```
 
 ## Architecture
@@ -86,6 +98,7 @@ Flux variable substitution (`postBuild.substituteFrom`) pulls values from the `c
 - **OpenEBS hostpath** (`host-zfs-standard` StorageClass): Primary PVC storage backed by a ZFS pool named `zfspv-pool` on the NVMe drive. The cluster requires this ZFS pool to exist.
 - **Volsync**: PVC backups via Restic to an external repository. Apps opt in by including `components/volsync` and providing a `${CLAIM}-backup-config` Secret.
 - **Snapshot**: `host-zfs-snapshot` VolumeSnapshotClass used by Volsync for point-in-time copies.
+- **Volsync maintenance**: Use `task volsync:unlock` to clear stale restic locks and `task volsync:delete-cache-pvcs` to recreate cache PVCs with correct ownership.
 
 ### CI
 
