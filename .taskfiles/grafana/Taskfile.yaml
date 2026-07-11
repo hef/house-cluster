@@ -1,0 +1,17 @@
+version: 3
+tasks:
+  update-password:
+    desc: Update the Grafana admin password in both the SOPS secret and the live cluster
+    vars:
+      SECRET_FILE: apps/observability/grafana/app/secret.sops.yaml
+    prompt: This will update the Grafana admin password. Continue?
+    cmds:
+      - |
+        read -p "Enter new Grafana admin password: " -s NEW_PASSWORD && echo
+        sops set {{.SECRET_FILE}} '["stringData"]["admin-password"]' "\"$NEW_PASSWORD\""
+        kubectl --kubeconfig=./kubeconfig create secret generic grafana-admin-secret \
+          --from-literal=admin-user=admin \
+          --from-literal=admin-password="$NEW_PASSWORD" \
+          --namespace=observability \
+          --dry-run=client -o yaml | kubectl --kubeconfig=./kubeconfig apply -f -
+        echo "Password updated in SOPS secret and live cluster."
