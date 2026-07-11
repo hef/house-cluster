@@ -4,6 +4,7 @@ kind: Cluster
 metadata:
   name: house-db
 spec:
+  enableSuperuserAccess: true
   instances: 3
   primaryUpdateStrategy: unsupervised
   storage:
