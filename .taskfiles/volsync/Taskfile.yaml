@@ -9,6 +9,8 @@ tasks:
   unlock:
     desc: Remove all stale restic locks from volsync backup repositories
     cmds:
+      - kubectl delete job volsync-unlock-manual -n default --ignore-not-found
       - kubectl create job --from=cronjob/volsync-unlock volsync-unlock-manual -n default
-      - cmd: 'echo "Job created. Watch with: kubectl logs -f job/volsync-unlock-manual -n default"'
-        silent: true
+      - kubectl wait --for=condition=ready pod -l job-name=volsync-unlock-manual -n default --timeout=120s || true
+      - kubectl logs -f job/volsync-unlock-manual -n default
+      - kubectl wait --for=condition=complete job/volsync-unlock-manual -n default --timeout=300s
