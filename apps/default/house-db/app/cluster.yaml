@@ -18,6 +18,9 @@ spec:
     initdb:
       database: app
       owner: app
+      encoding: UTF8
+      localeCollate: C
+      localeCType: C
       postInitApplicationSQL:
         - GRANT CONNECT ON DATABASE app TO grafana
         - GRANT USAGE ON SCHEMA public TO grafana
