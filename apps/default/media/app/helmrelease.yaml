@@ -38,7 +38,7 @@ spec:
           server:
             image:
               repository: quay.io/aminvakil/alpine-nfs-server
-              tag: latest@sha256:37fb7d894aebb66fe4d6bbd1899854bccb11b8e3257f69b562ecda0b741d014d
+              tag: latest@sha256:4051cdc395da395ec42bfa473b25c69a686f75b7ebd10542afc5c0f44602e0dd
             env:
               TZ: ${SECRET_TZ}
               SHARED_DIRECTORY: /media
