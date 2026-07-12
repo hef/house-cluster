@@ -27,6 +27,7 @@ spec:
     substitute:
       CLAIM: esphome-config
       CAPACITY: 10Gi
+      VOLSYNC_CACHE_CAPACITY: 5Gi
   prune: true
   retryInterval: 2m
   sourceRef:

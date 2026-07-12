@@ -13,6 +13,11 @@ spec:
     pruneIntervalDays: 14
     # Name of the Secret with the connection information
     repository: ${CLAIM}-backup-config
+    # Size of the restic metadata cache PVC. Defaults to 1Gi but can be
+    # overridden per-app (e.g. esphome, whose PVC holds large build caches).
+    cacheCapacity: ${VOLSYNC_CACHE_CAPACITY:=1Gi}
+    cacheStorageClassName: host-zfs-standard
+    cacheAccessModes: ["ReadWriteOnce"]
     # Retention policy for backups
     retain:
       hourly: 24
