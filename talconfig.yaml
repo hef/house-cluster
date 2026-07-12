@@ -1,7 +1,7 @@
 clusterName: house
 endpoint: https://192.168.1.200:6443
 # renovate: datasource=docker depName=ghcr.io/siderolabs/installer
-talosVersion: v1.10.6
+talosVersion: v1.13.6
 # renovate: datasource=docker depName=ghcr.io/siderolabs/kubelet
 kubernetesVersion: v1.33.3
 allowSchedulingOnMasters: true
