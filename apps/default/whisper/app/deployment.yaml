@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: whisper
-          image: rhasspy/wyoming-whisper:3.1.0@sha256:9501d2659eee83b6eead98d53842193e5fed011eda6c5b1c3ad36f3146b28fed
+          image: rhasspy/wyoming-whisper:3.5.0@sha256:308b7959a925d0cca381c3e6e77292fed87822695635db39c24199d6b7a9e610
           args: ["--model", "tiny-int8", "--language", "en", "--data-dir", "/data"]
           ports:
             - containerPort: 10300
