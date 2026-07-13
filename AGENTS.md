@@ -44,6 +44,10 @@ task volsync:unlock
 
 # Delete all volsync cache PVCs so they get recreated with correct ownership
 task volsync:delete-cache-pvcs
+
+# Delete the home-assistant-cache PVC so /config/.venv is rebuilt clean
+# (use after an HA upgrade leaves a stale dependency and breaks logins)
+task homeassistant:rebuild-venv
 ```
 
 ## Architecture

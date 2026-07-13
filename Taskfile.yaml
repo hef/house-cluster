@@ -3,6 +3,7 @@ includes:
   bootstrap: .taskfiles/bootstrap
   cnpg: .taskfiles/cnpg
   grafana: .taskfiles/grafana
+  homeassistant: .taskfiles/homeassistant
   talos: .taskfiles/talos
   volsync: .taskfiles/volsync
 tasks:

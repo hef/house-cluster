@@ -1,0 +1,22 @@
+version: 3
+
+# When to use `homeassistant:rebuild-venv`:
+# The Home Assistant image (ghcr.io/home-operations/home-assistant) uses `uv`
+# to install integration dependencies into /config/.venv, which is persisted on
+# the `home-assistant-cache` PVC for faster restarts. After a Home Assistant
+# version bump, `uv` may consider stale packages (e.g. aiohttp) "already
+# satisfied" and never upgrade them, leaving the old library shadowing the one
+# that ships in the new image. This shows up as errors like:
+#   TypeError: WebSocketResponse.__init__() got an unexpected keyword argument 'decode_text'
+# and login from the web UI / mobile app breaking.
+# Run this task after upgrading Home Assistant if you hit dependency/version
+# mismatches. It only wipes the rebuildable venv cache PVC — your real config
+# lives on the separate `hass-config` PVC and is left untouched.
+
+tasks:
+  rebuild-venv:
+    desc: Delete the home-assistant-cache PVC so /config/.venv is rebuilt clean (use after an HA upgrade breaks logins)
+    prompt: This will delete the home-assistant-cache PVC and restart Home Assistant. Continue?
+    cmds:
+      - kubectl --kubeconfig=./kubeconfig -n default delete pvc home-assistant-cache --ignore-not-found
+      - kubectl --kubeconfig=./kubeconfig -n default rollout restart deployment home-assistant
