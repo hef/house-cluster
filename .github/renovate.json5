@@ -45,9 +45,15 @@
   },
   packageRules: [
     {
-      matchPackageNames: [
-        'factorio'
+      description: 'Factorio: pin to the 2.0 stable line, never update to 2.1+ experimental',
+      matchDatasources: [
+        'docker',
       ],
+      matchPackageNames: [
+        '/factorio/',
+      ],
+      // Stay on stable 2.0.x; block 2.1+ (experimental) until it becomes stable.
+      allowedVersions: '<2.1',
       pinDigest: {
         enabled: true
       }, 
