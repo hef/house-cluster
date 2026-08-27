@@ -23,5 +23,15 @@ tasks:
       UPGRADE_CMD:
         # todo: remove force when we get mutliple nodes
         sh: talhelper gencommand upgrade --node 192.168.1.22 --extra-flags="--timeout='10m' --force" | bash
+  kubeconfig:
+    desc: "Regenerate the admin kubeconfig from Talos (fixes expired client certs)"
+    vars:
+      # Use the cluster VIP; the node's own IP is not always reachable.
+      ENDPOINT: '{{.ENDPOINT | default "192.168.1.200"}}'
+    cmds:
+      # Refresh the repo-local kubeconfig (git-ignored).
+      - talosctl --talosconfig clusterconfig/talosconfig -e {{.ENDPOINT}} -n {{.ENDPOINT}} kubeconfig ./kubeconfig --force
+      # Merge fresh admin credentials into the user's default kubeconfig (used by kubectl/k9s).
+      - talosctl --talosconfig clusterconfig/talosconfig -e {{.ENDPOINT}} -n {{.ENDPOINT}} kubeconfig ~/.kube/config --force --merge
 
     

@@ -21,6 +21,9 @@ task talos:apply
 # Upgrade Talos on the node
 task talos:upgrade
 
+# Regenerate the admin kubeconfig from Talos (fixes expired client certs; refreshes ./kubeconfig and merges into ~/.kube/config)
+task talos:kubeconfig
+
 # Bootstrap a fresh cluster (full sequence: generate config → apply → bootstrap etcd → get kubeconfig → install prometheus-operator CRDs → helmfile (installs Flux) → apply SOPS secret → install external-dns/gateway-api CRDs)
 task bootstrap:talos
 
