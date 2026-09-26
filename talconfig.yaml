@@ -28,14 +28,6 @@ nodes:
           vip:
             ip: 192.168.1.200
       installDisk: /dev/nvme0n1
-      userVolumes:
-        - name: openebs
-          provisioning:
-            diskSelector:
-              match: disk.transport == "nvme"
-            maxSize: "200GiB"
-          filesystem:
-            type: xfs
       kernelModules:
         - name: zfs
         #- name: dm_thin_pool
@@ -44,14 +36,8 @@ nodes:
           provisioning:
             diskSelector:
               match: disk.transport == "nvme"
-            maxSize: 50GiB
-        - name: IMAGECACHE
-          provisioning:
-            diskSelector:
-              match: disk.transport == "nvme"
-            maxSize: 50GiB
+            maxSize: 100GiB
       patches:
-        - "@./patches/local-path.yaml"
         - "@./patches/machine-network.yaml"
         - "@./patches/sysctls.yaml"
       schematic:

@@ -6,6 +6,8 @@ engines:
       enabled: false
     zfs:
       enabled: true
+    hostpath:
+      enabled: false
   replicated:
     mayastor:
       enabled: false
@@ -25,10 +27,6 @@ zfs-localpv:
     csi:
       volumeSnapshots:
         enabled: false
-localpv-provisioner:
-  localpv:
-    enabled: true
-    basePath: /var/mnt/openebs/local
 
 loki:
   enabled: false

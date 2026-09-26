@@ -106,7 +106,7 @@ Flux variable substitution (`postBuild.substituteFrom`) pulls values from the `c
 
 ### Storage
 
-- **OpenEBS hostpath** (`host-zfs-standard` StorageClass): Primary PVC storage backed by a ZFS pool named `zfspv-pool` on the NVMe drive. The cluster requires this ZFS pool to exist.
+- **OpenEBS ZFS** (`host-zfs-standard` / `host-zfs-files` / `host-zfs-postgres`): Primary PVC storage via zfs-localpv on pool `zfspv-pool` on the NVMe drive. The cluster requires this ZFS pool to exist.
 - **Volsync**: PVC backups via Restic to an external repository. Apps opt in by including `components/volsync` and providing a `${CLAIM}-backup-config` Secret.
 - **Snapshot**: `host-zfs-snapshot` VolumeSnapshotClass used by Volsync for point-in-time copies.
 - **Volsync maintenance**: Use `task volsync:unlock` to clear stale restic locks and `task volsync:delete-cache-pvcs` to recreate cache PVCs with correct ownership.
