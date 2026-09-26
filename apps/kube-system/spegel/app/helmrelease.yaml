@@ -16,6 +16,21 @@ spec:
     cleanupOnFail: true
     remediation:
       retries: 3
+  # Single-node clusters never populate Spegel's P2P routing table, so /readyz
+  # stays 500 and the chart's startup probe never succeeds. Probe /livez instead.
+  postRenderers:
+    - kustomize:
+        patches:
+          - target:
+              kind: DaemonSet
+              name: spegel
+            patch: |-
+              - op: replace
+                path: /spec/template/spec/containers/0/startupProbe/httpGet/path
+                value: /livez
+              - op: replace
+                path: /spec/template/spec/containers/0/readinessProbe/httpGet/path
+                value: /livez
   valuesFrom:
     - kind: ConfigMap
       name: spegel-values
