@@ -53,7 +53,6 @@ nodes:
       patches:
         - "@./patches/local-path.yaml"
         - "@./patches/machine-network.yaml"
-        - "@./patches/spegel.yaml"
         - "@./patches/sysctls.yaml"
       schematic:
         customization:

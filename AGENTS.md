@@ -63,7 +63,7 @@ task factorio:upload-save
 
 There are two layers of cluster setup:
 
-1. **`helmfile.yaml` (bootstrap-only)**: Installs the minimum set of charts needed before Flux exists — Cilium, CoreDNS, Spegel, cert-manager, flux-operator, flux-instance — in strict dependency order. This is only run once during `task bootstrap:talos`.
+1. **`helmfile.yaml` (bootstrap-only)**: Installs the minimum set of charts needed before Flux exists — Cilium, CoreDNS, cert-manager, flux-operator, flux-instance — in strict dependency order. This is only run once during `task bootstrap:talos`.
 
 2. **FluxCD (runtime)**: Once Flux is running, it watches this repo and reconciles everything under `apps/`. The entry point is `flux/cluster/ks.yaml`, which creates a Flux `Kustomization` pointing at `./apps`.
 
