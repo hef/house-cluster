@@ -89,12 +89,12 @@ spec:
             type: postgres
             uid: house-db
             access: proxy
-            url: house-db-ro.default.svc.cluster.local:5432
+            url: house-db-rw.default.svc.cluster.local:5432
             user: grafana
             jsonData:
               database: app
               sslmode: require
-              postgresVersion: 1700
+              postgresVersion: 1800
             secureJsonData:
               password: $__env{GF_DATASOURCE_HOUSE_DB_PASSWORD}
     dashboardProviders:

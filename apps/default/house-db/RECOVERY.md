@@ -36,7 +36,7 @@ kind: Cluster
 metadata:
   name: house-db-restore
 spec:
-  instances: 3
+  instances: 1
   storage:
     size: 10Gi
     storageClass: host-zfs-postgres

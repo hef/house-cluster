@@ -5,8 +5,12 @@ metadata:
   name: house-db
 spec:
   enableSuperuserAccess: true
-  instances: 3
+  instances: 1
+  enablePDB: false
   primaryUpdateStrategy: unsupervised
+  # Barman Cloud lives in the plugin sidecar; use standard instead of deprecated system-*.
+  # renovate: datasource=docker depName=ghcr.io/cloudnative-pg/postgresql
+  imageName: ghcr.io/cloudnative-pg/postgresql:18.4-standard-trixie
   storage:
     size: 10Gi
     storageClass: host-zfs-postgres
