@@ -1,2 +1,7 @@
 kubeconfig
+kubeconfig.bak.*
 *.decrypted~*.yaml
+
+# Local IDE / agent tooling
+.air/
+.idea/
