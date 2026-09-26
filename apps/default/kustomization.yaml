@@ -13,7 +13,6 @@ resources:
   - ./house-db/ks.yaml
   - ./jellyfin/ks.yaml
   - ./mainsite/ks.yaml
-  - ./media/ks.yaml
   - ./mosquitto/ks.yaml
   - ./openwakeword/ks.yaml
   - ./pgadmin/ks.yaml

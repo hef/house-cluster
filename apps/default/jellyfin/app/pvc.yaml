@@ -9,3 +9,14 @@ spec:
     requests:
       storage: 50Gi
   storageClassName: host-zfs-files
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: media
+spec:
+  accessModes: ["ReadWriteMany"]
+  resources:
+    requests:
+      storage: 100Gi
+  storageClassName: host-zfs-files
