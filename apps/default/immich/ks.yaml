@@ -14,8 +14,10 @@ spec:
     secretRef:
       name: sops-age
   dependsOn:
-    - name: house-db
-      namespace: default
+    - name: cnpg
+      namespace: cnpg-system
+    - name: barman-cloud
+      namespace: cnpg-system
     - name: openebs
       namespace: kube-system
   interval: 1h

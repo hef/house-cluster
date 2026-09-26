@@ -26,23 +26,23 @@ spec:
               tag: v3.2.0
             env:
               TZ: ${SECRET_TZ:=UTC}
-              DB_HOSTNAME: house-db-rw
+              DB_HOSTNAME: immich-db-rw
               DB_PORT: "5432"
               DB_SSLMODE: require
               DB_USERNAME:
                 valueFrom:
                   secretKeyRef:
-                    name: immich-db-secret
+                    name: immich-db-app
                     key: username
               DB_DATABASE_NAME:
                 valueFrom:
                   secretKeyRef:
-                    name: immich-db-secret
+                    name: immich-db-app
                     key: dbname
               DB_PASSWORD:
                 valueFrom:
                   secretKeyRef:
-                    name: immich-db-secret
+                    name: immich-db-app
                     key: password
     immich:
       persistence:

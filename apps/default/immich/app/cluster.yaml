@@ -1,0 +1,48 @@
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: immich-db
+spec:
+  instances: 1
+  enablePDB: false
+  primaryUpdateStrategy: unsupervised
+  # Immich needs VectorChord; keep this off house-db's stock Postgres image.
+  # renovate: datasource=docker depName=ghcr.io/tensorchord/cloudnative-vectorchord
+  imageName: ghcr.io/tensorchord/cloudnative-vectorchord:17.5-0.4.3
+  storage:
+    size: 10Gi
+    storageClass: host-zfs-postgres
+  postgresql:
+    shared_preload_libraries:
+      - vchord.so
+    parameters:
+      max_connections: "100"
+      shared_buffers: 256MB
+      # ZFS CoW: no torn 8k pages (host-zfs-postgres recordsize=8k), so skip FPIs
+      # and don't pre-zero/recycle WAL files.
+      full_page_writes: "off"
+      wal_init_zero: "off"
+      wal_recycle: "off"
+  bootstrap:
+    initdb:
+      database: immich
+      owner: immich
+      encoding: UTF8
+      localeCollate: C
+      localeCType: C
+      postInitApplicationSQL:
+        - CREATE EXTENSION IF NOT EXISTS vchord CASCADE;
+        - CREATE EXTENSION IF NOT EXISTS cube;
+        - CREATE EXTENSION IF NOT EXISTS earthdistance;
+        - CREATE EXTENSION IF NOT EXISTS unaccent;
+        - CREATE EXTENSION IF NOT EXISTS pg_trgm;
+        # Later Immich migrations also CREATE EXTENSION; keep the app role able to.
+        - ALTER ROLE immich WITH SUPERUSER;
+  plugins:
+    - name: barman-cloud.cloudnative-pg.io
+      isWALArchiver: true
+      parameters:
+        barmanObjectName: immich-db
+  monitoring:
+    enablePodMonitor: false
