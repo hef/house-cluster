@@ -18,6 +18,11 @@ spec:
     parameters:
       max_connections: "100"
       shared_buffers: 256MB
+      # ZFS CoW: no torn 8k pages (host-zfs-postgres recordsize=8k), so skip FPIs
+      # and don't pre-zero/recycle WAL files.
+      full_page_writes: "off"
+      wal_init_zero: "off"
+      wal_recycle: "off"
   bootstrap:
     initdb:
       database: app
