@@ -9,6 +9,8 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
+  components:
+    - ../../../../components/volsync
   decryption:
     provider: sops
     secretRef:
@@ -22,10 +24,34 @@ spec:
       namespace: kube-system
   interval: 1h
   path: ./apps/default/immich/app
+  patches:
+    # Keep the existing library PVC: files class + RWX, no restore dataSource
+    # (dataSourceRef is immutable on an already-bound claim).
+    - target:
+        kind: PersistentVolumeClaim
+      patch: |-
+        - op: remove
+          path: /spec/dataSourceRef
+        - op: replace
+          path: /spec/storageClassName
+          value: host-zfs-files
+    - target:
+        kind: ReplicationDestination
+      patch: |-
+        - op: replace
+          path: /spec/restic/storageClassName
+          value: host-zfs-files
+        - op: replace
+          path: /spec/restic/accessModes/0
+          value: ReadWriteMany
   postBuild:
     substituteFrom:
       - name: cluster-secrets
         kind: Secret
+    substitute:
+      CLAIM: immich-library
+      CAPACITY: 100Gi
+      ACCESS_MODE: ReadWriteMany
   prune: true
   retryInterval: 2m
   sourceRef:

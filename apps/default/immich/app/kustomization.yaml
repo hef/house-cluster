@@ -7,5 +7,4 @@ resources:
   - ./objectstore.yaml
   - ./cluster.yaml
   - ./scheduledbackup.yaml
-  - ./pvc.yaml
   - ./helmrelease.yaml
