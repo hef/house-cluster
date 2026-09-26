@@ -1,0 +1,69 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/helmrelease-helm-v2.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: immich
+spec:
+  interval: 1h
+  timeout: 15m
+  chartRef:
+    kind: OCIRepository
+    name: immich
+  install:
+    remediation:
+      retries: -1
+  upgrade:
+    cleanupOnFail: true
+    remediation:
+      retries: 3
+  values:
+    controllers:
+      main:
+        containers:
+          main:
+            image:
+              tag: v3.2.0
+            env:
+              TZ: ${SECRET_TZ:=UTC}
+              DB_HOSTNAME: house-db-rw
+              DB_PORT: "5432"
+              DB_SSLMODE: require
+              DB_USERNAME:
+                valueFrom:
+                  secretKeyRef:
+                    name: immich-db-secret
+                    key: username
+              DB_DATABASE_NAME:
+                valueFrom:
+                  secretKeyRef:
+                    name: immich-db-secret
+                    key: dbname
+              DB_PASSWORD:
+                valueFrom:
+                  secretKeyRef:
+                    name: immich-db-secret
+                    key: password
+    immich:
+      persistence:
+        library:
+          existingClaim: immich-library
+    valkey:
+      enabled: true
+    server:
+      route:
+        main:
+          hostnames:
+            - immich.${SECRET_DOMAIN:=example.com}
+          parentRefs:
+            - name: internal
+              namespace: kube-system
+              sectionName: https
+    machine-learning:
+      persistence:
+        cache:
+          enabled: true
+          type: persistentVolumeClaim
+          size: 10Gi
+          accessMode: ReadWriteOnce
+          storageClass: host-zfs-standard

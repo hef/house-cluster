@@ -8,13 +8,15 @@ spec:
   instances: 1
   enablePDB: false
   primaryUpdateStrategy: unsupervised
-  # Barman Cloud lives in the plugin sidecar; use standard instead of deprecated system-*.
-  # renovate: datasource=docker depName=ghcr.io/cloudnative-pg/postgresql
-  imageName: ghcr.io/cloudnative-pg/postgresql:18.4-standard-trixie
+  # Immich needs VectorChord; Grafana shares this instance. Flavor is CNPG-compatible.
+  # renovate: datasource=docker depName=ghcr.io/tensorchord/cloudnative-vectorchord
+  imageName: ghcr.io/tensorchord/cloudnative-vectorchord:18.4-1.1.1
   storage:
     size: 10Gi
     storageClass: host-zfs-postgres
   postgresql:
+    shared_preload_libraries:
+      - vchord.so
     parameters:
       max_connections: "100"
       shared_buffers: 256MB
@@ -54,5 +56,14 @@ spec:
         inherit: true
         passwordSecret:
           name: grafana-db-secret
+      - name: immich
+        ensure: present
+        login: true
+        superuser: true
+        createdb: false
+        createrole: false
+        inherit: true
+        passwordSecret:
+          name: immich-db-secret
   monitoring:
     enablePodMonitor: false
