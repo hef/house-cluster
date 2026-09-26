@@ -1,0 +1,57 @@
+version: 3
+
+# When to use `factorio:upload-save`:
+# Copies a local Factorio save (.zip) from your machine onto the `factorio`
+# PVC, overwriting the save already there. Useful when you want to restore or
+# replace the server's world with one you have locally.
+#
+# The factorio deployment is normally scaled to 0 (started/stopped on a
+# schedule), so this task attaches a temporary helper pod to the same PVC,
+# copies the file in, fixes ownership to the factorio user (uid/gid 845), then
+# tears the helper pod down. The next time the deployment scales up it will
+# load the uploaded save.
+#
+# Usage:
+#   task factorio:upload-save
+#   task factorio:upload-save SAVE="/path/to/world.zip"
+#   task factorio:upload-save SAVE="/path/to/world.zip" DEST=my-save.zip
+
+tasks:
+  upload-save:
+    desc: Copy a local Factorio save onto the factorio PVC (overwrites the existing save)
+    vars:
+      # Local save file to upload.
+      SAVE: '{{.SAVE | default "/Users/hef/Library/Application Support/factorio/saves/wtf.zip"}}'
+      # Destination filename inside /factorio/saves on the volume.
+      DEST: '{{.DEST | default "wtf.zip"}}'
+      # factorio runs as uid/gid 845 in the container.
+      UID: '845'
+    cmds:
+      - test -f "{{.SAVE}}"
+      - |
+        kubectl --kubeconfig=./kubeconfig apply -f - <<'EOF'
+        apiVersion: v1
+        kind: Pod
+        metadata:
+          name: factorio-filecopy
+          namespace: default
+        spec:
+          restartPolicy: Never
+          nodeSelector:
+            kubernetes.io/arch: "amd64"
+          containers:
+            - name: helper
+              image: busybox
+              command: ["sleep", "3600"]
+              volumeMounts:
+                - name: factorio
+                  mountPath: /factorio
+          volumes:
+            - name: factorio
+              persistentVolumeClaim:
+                claimName: factorio
+        EOF
+      - kubectl --kubeconfig=./kubeconfig -n default wait --for=condition=Ready pod/factorio-filecopy --timeout=120s
+      - kubectl --kubeconfig=./kubeconfig cp "{{.SAVE}}" default/factorio-filecopy:/factorio/saves/{{.DEST}}
+      - kubectl --kubeconfig=./kubeconfig exec -n default factorio-filecopy -- sh -c 'chown {{.UID}}:{{.UID}} /factorio/saves/{{.DEST}}; ls -la /factorio/saves/{{.DEST}}'
+      - defer: kubectl --kubeconfig=./kubeconfig delete pod factorio-filecopy -n default --wait=false --ignore-not-found

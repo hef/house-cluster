@@ -51,6 +51,10 @@ task volsync:delete-cache-pvcs
 # Delete the home-assistant-cache PVC so /config/.venv is rebuilt clean
 # (use after an HA upgrade leaves a stale dependency and breaks logins)
 task homeassistant:rebuild-venv
+
+# Upload a local Factorio save onto the factorio PVC (overwrites the existing save)
+# Defaults to ~/Library/Application Support/factorio/saves/wtf.zip; override with SAVE=... DEST=...
+task factorio:upload-save
 ```
 
 ## Architecture
@@ -74,7 +78,7 @@ There are two layers of cluster setup:
 - `clusterconfig/` — Generated Talos configs (git-ignored except the talosconfig file).
 - `helmfile.yaml` — Bootstrap-only helm chart installs.
 - `talconfig.yaml` — Node definitions and schematic for `talhelper`.
-- `.taskfiles/` — Task definitions grouped by domain (bootstrap, cnpg, grafana, talos, volsync), included from the root `Taskfile.yaml`.
+- `.taskfiles/` — Task definitions grouped by domain (bootstrap, cnpg, factorio, grafana, homeassistant, talos, volsync), included from the root `Taskfile.yaml`.
 
 ### How a New App Is Added
 

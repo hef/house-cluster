@@ -2,6 +2,7 @@ version: 3
 includes:
   bootstrap: .taskfiles/bootstrap
   cnpg: .taskfiles/cnpg
+  factorio: .taskfiles/factorio
   grafana: .taskfiles/grafana
   homeassistant: .taskfiles/homeassistant
   talos: .taskfiles/talos
