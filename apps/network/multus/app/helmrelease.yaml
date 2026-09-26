@@ -18,6 +18,8 @@ spec:
 
         pod:
           hostNetwork: true
+          # Multus talks to the Kubernetes API; app-template 5.x defaults this to false.
+          automountServiceAccountToken: true
 
         initContainers:
           cni-plugins:
