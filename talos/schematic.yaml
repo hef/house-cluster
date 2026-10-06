@@ -1,0 +1,13 @@
+---
+customization:
+  extraKernelArgs:
+    - net.ifnames=0
+    - amd_pstate=active
+    - mitigations=off
+    - iommu.passthrough=1
+  systemExtensions:
+    officialExtensions:
+      - siderolabs/amd-ucode
+      - siderolabs/amdgpu
+      - siderolabs/nfsd
+      - siderolabs/zfs

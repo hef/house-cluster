@@ -12,7 +12,7 @@ This is a GitOps home Kubernetes cluster configuration. A single-node Talos Linu
 # List all available tasks
 task
 
-# Generate Talos machine configs from talconfig.yaml
+# Render Talos machine configs from talos/topf.yaml
 task talos:genconfig
 
 # Apply updated Talos config to the node (with reboot)
@@ -74,10 +74,9 @@ There are two layers of cluster setup:
   - `app/` — The actual Kubernetes manifests (HelmRelease, Deployment, PVC, secrets, etc.)
 - `components/common/` — Kustomize Component included in every namespace-level `kustomization.yaml`. Provides shared cluster secrets, SOPS decryption config, and namespace creation.
 - `components/volsync/` — Kustomize Component included in any app that needs PVC backups. Adds a Restic-backed `ReplicationSource` (runs every 4h) and a `ReplicationDestination` for restore.
-- `patches/` — Talos machine config patches applied via `talconfig.yaml`.
-- `clusterconfig/` — Generated Talos configs (git-ignored except the talosconfig file).
+- `talos/` — TOPF inventory (`topf.yaml`), schematic, SOPS secrets, and machine-config patches (`all/`, `control-plane/`, `node/<host>/`).
+- `clusterconfig/` — Generated Talos configs and talosconfig (git-ignored).
 - `helmfile.yaml` — Bootstrap-only helm chart installs.
-- `talconfig.yaml` — Node definitions and schematic for `talhelper`.
 - `.taskfiles/` — Task definitions grouped by domain (bootstrap, cnpg, factorio, grafana, homeassistant, talos, volsync), included from the root `Taskfile.yaml`.
 
 ### How a New App Is Added
@@ -90,7 +89,7 @@ There are two layers of cluster setup:
 ### Secrets
 
 Secrets are encrypted with SOPS + age. The `.sops.yaml` rules:
-- `talsecret.sops.yaml` — fully encrypted
+- `talos/secrets.sops.yaml` — fully encrypted Talos cluster secrets
 - `apps/**/*.sops.yaml` and `components/**/*.sops.yaml` — only `data` and `stringData` fields are encrypted
 
 Flux decrypts secrets at runtime using the `sops-age` secret in `flux-system`. To edit an encrypted file: `sops <file>`.
@@ -120,7 +119,7 @@ On pull requests touching `apps/`, `components/`, or `flux/`, GitHub Actions run
 
 ## Key Tools Required
 
-- `talhelper` — generates Talos machine configs from `talconfig.yaml`
+- `topf` — generates and applies Talos machine configs from `talos/topf.yaml`
 - `task` — task runner
 - `sops` — decrypt/edit secrets
 - `helmfile` — bootstrap helm installs

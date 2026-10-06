@@ -3,19 +3,10 @@ version: 3
 tasks:
   talos:
     desc: Bootstrap the Talos cluster
-    vars:
-      APPLY_CMD:
-        # todo: for initial install from iso/flash drive, insecure makes it not work
-        sh: talhelper gencommand apply --extra-flags="--insecure"
-      BOOTSTRAP_CMD:
-        sh: talhelper gencommand bootstrap
-      KUBECONFIG_CMD:
-        sh: talhelper gencommand kubeconfig --extra-flags="{{.ROOT_DIR}} --force"
     cmds:
-      - talhelper genconfig
-      - until {{.APPLY_CMD}} do sleep 10; done
-      - until {{.BOOTSTRAP_CMD}} do sleep 10; done
-      - until {{.KUBECONFIG_CMD}} do sleep 10; done
+      # TOPF uses insecure machine API automatically while the node is in maintenance mode.
+      - until topf apply --topfconfig talos/topf.yaml --confirm=false --auto-bootstrap; do sleep 10; done
+      - task: :talos:kubeconfig
       - until kubectl version; do sleep 10; done
         # renovate: datasource=github-releases depName=prometheus-operator/prometheus-operator
       - kubectl apply --server-side --filename https://github.com/prometheus-operator/prometheus-operator/releases/download/v0.94.1/stripped-down-crds.yaml
@@ -25,5 +16,3 @@ tasks:
       - kubectl apply --server-side --filename https://raw.githubusercontent.com/kubernetes-sigs/external-dns/refs/tags/v0.23.0/config/crd/standard/dnsendpoints.externaldns.k8s.io.yaml
         # renovate: datasource=github-releases depName=kubernetes-sigs/gateway-api
       - kubectl apply --server-side --filename https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.6.2/experimental-install.yaml
-      
-      

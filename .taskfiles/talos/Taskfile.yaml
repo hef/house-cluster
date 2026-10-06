@@ -1,37 +1,38 @@
 version: '3'
 
+vars:
+  TOPFCONFIG: talos/topf.yaml
+  # Use the cluster VIP; the node's own IP is not always reachable for kubeconfig.
+  ENDPOINT: '{{.ENDPOINT | default "192.168.1.200"}}'
+
 tasks:
   reset:
-    desc: reset cluster back to maitinance mode
-    vars:
-      RESET_CMD:
-        sh: talhelper gencommand reset --extra-flags="--reboot --system-labels-to-wipe STATE --system-labels-to-wipe EPHEMERAL --graceful=false --wait=false"
+    desc: Reset cluster back to maintenance mode
     cmds:
-     - "{{.RESET_CMD}}"
+      - topf reset --topfconfig {{.TOPFCONFIG}} --confirm=false --full=false --graceful=false
   genconfig:
-    desc: Generate Talos Config
-    cmd: talhelper genconfig
+    desc: Render Talos machine configs
+    cmds:
+      - mkdir -p clusterconfig
+      - topf render --topfconfig {{.TOPFCONFIG}} --confirm=false --output clusterconfig
   apply:
-    desc: apply config
+    desc: Apply config
     cmds:
-      - talhelper gencommand apply --node 192.168.1.22 --extra-flags="--mode=reboot" | bash
+      - topf apply --topfconfig {{.TOPFCONFIG}} --confirm=false --mode=reboot
   upgrade:
-    desc: "Upgrade Talos"
+    desc: Upgrade Talos
     cmds:
-      - "{{.UPGRADE_CMD}}"
-    vars:
-      UPGRADE_CMD:
-        # todo: remove force when we get mutliple nodes
-        sh: talhelper gencommand upgrade --node 192.168.1.22 --extra-flags="--timeout='10m' --force" | bash
+      # Single node: skip drain so the only control-plane is not cordoned.
+      # Drop --drain=false when there are multiple nodes.
+      - topf upgrade --topfconfig {{.TOPFCONFIG}} --confirm=false --drain=false
   kubeconfig:
     desc: "Regenerate the admin kubeconfig from Talos (fixes expired client certs)"
-    vars:
-      # Use the cluster VIP; the node's own IP is not always reachable.
-      ENDPOINT: '{{.ENDPOINT | default "192.168.1.200"}}'
     cmds:
+      - mkdir -p clusterconfig
+      - topf talosconfig --topfconfig {{.TOPFCONFIG}} --confirm=false --redact=false > clusterconfig/talosconfig
+      - talosctl --talosconfig clusterconfig/talosconfig config endpoint {{.ENDPOINT}}
+      - talosctl --talosconfig clusterconfig/talosconfig config node {{.ENDPOINT}}
       # Refresh the repo-local kubeconfig (git-ignored).
       - talosctl --talosconfig clusterconfig/talosconfig -e {{.ENDPOINT}} -n {{.ENDPOINT}} kubeconfig ./kubeconfig --force
       # Merge fresh admin credentials into the user's default kubeconfig (used by kubectl/k9s).
       - talosctl --talosconfig clusterconfig/talosconfig -e {{.ENDPOINT}} -n {{.ENDPOINT}} kubeconfig ~/.kube/config --force --merge
-
-    
