@@ -4,7 +4,7 @@ This file provides guidance to AI coding agents when working with code in this r
 
 ## Overview
 
-This is a GitOps home Kubernetes cluster configuration. A single-node Talos Linux cluster (node `k8s-4` at `192.168.1.22`, VIP `192.168.1.200`) is managed via FluxCD. All cluster state is declared here and reconciled automatically.
+This is a GitOps home Kubernetes cluster configuration. A single-node Talos Linux cluster (node `k8s-4` at `192.168.1.21`, VIP `192.168.1.200`) is managed via FluxCD. All cluster state is declared here and reconciled automatically.
 
 ## Common Commands
 

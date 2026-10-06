@@ -1,8 +1,8 @@
-machine:
-  features:
-    hostDNS:
-      enabled: true
-      resolveMemberNames: true
-      forwardKubeDNSToHost: false
-  network:
-    disableSearchDomain: true
+apiVersion: v1alpha1
+kind: ResolverConfig
+searchDomains:
+  disableDefault: true
+hostDNS:
+  enabled: true
+  resolveMemberNames: true
+  forwardKubeDNSToHost: false

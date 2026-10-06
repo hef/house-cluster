@@ -1,29 +1,47 @@
 cluster:
   allowSchedulingOnControlPlanes: true
-  apiServer:
-    extraArgs:
-      # https://kubernetes.io/docs/tasks/extend-kubernetes/configure-aggregation-layer/
-      # aggregator-routing is required when not using kube-proxy
-      enable-aggregator-routing: true
-    certSANs:
-      - house.local
-  controllerManager:
-    extraArgs:
-      bind-address: 0.0.0.0
-  # we install coreDNS from a helm chart, don't need talos's built in one
-  coreDNS:
-    disabled: true
   etcd:
     extraArgs:
       listen-metrics-urls: http://0.0.0.0:2381
     advertisedSubnets:
       - 192.168.1.0/24
-  # cillium handles what kube-proxy would do
-  proxy:
-    disabled: true
-  scheduler:
-    extraArgs:
-      bind-address: 0.0.0.0
-  network:
-    cni:
-      name: none
+---
+apiVersion: v1alpha1
+kind: KubeAPIServerConfig
+extraArgs:
+  # https://kubernetes.io/docs/tasks/extend-kubernetes/configure-aggregation-layer/
+  # aggregator-routing is required when not using kube-proxy
+  enable-aggregator-routing: true
+certExtraSANs:
+  - house.local
+---
+apiVersion: v1alpha1
+kind: KubeControllerManagerConfig
+extraArgs:
+  bind-address: 0.0.0.0
+---
+apiVersion: v1alpha1
+kind: KubeSchedulerConfig
+extraArgs:
+  bind-address: 0.0.0.0
+---
+# cilium handles what kube-proxy would do
+apiVersion: v1alpha1
+kind: KubeProxyConfig
+enabled: false
+---
+# we install CoreDNS from a helm chart, don't need Talos's built-in one
+apiVersion: v1alpha1
+kind: KubeCoreDNSConfig
+enabled: false
+---
+# cilium is the CNI; drop the Talos-managed Flannel document
+apiVersion: v1alpha1
+kind: KubeFlannelCNIConfig
+$patch: delete
+---
+# drop TOPF's KubeNodeConfig (default NoSchedule taint) so v1alpha1
+# allowSchedulingOnControlPlanes stays in effect
+apiVersion: v1alpha1
+kind: KubeNodeConfig
+$patch: delete

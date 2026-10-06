@@ -18,6 +18,8 @@ patches taking precedence:
 
 Files ending in `.yaml.tpl` are Go-templated per node.
 
-This cluster is still on Talos 1.13, so install disk and cluster settings stay
-in the `machine:` / `cluster:` documents. Do not add `UnattendedInstallConfig`
-until the OS is on 1.14.
+Talos 1.14 splits Kubernetes, DNS, and install settings into dedicated
+documents. Patches in this directory use those kinds (`Kube*Config`,
+`ResolverConfig`, `UnattendedInstallConfig`) so they do not conflict with
+the documents TOPF emits. etcd extra args remain on the v1alpha1 `cluster:`
+document.
