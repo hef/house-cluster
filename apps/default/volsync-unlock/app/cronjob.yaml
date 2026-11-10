@@ -31,7 +31,7 @@ spec:
               emptyDir: {}
           containers:
             - name: unlock
-              image: quay.io/backube/volsync:0.16.0
+              image: quay.io/backube/volsync:0.17.0
               command: ["python3", "-u", "-c"]
               args:
                 - |
