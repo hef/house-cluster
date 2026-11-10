@@ -7,7 +7,7 @@ tasks:
       - kubectl get pvc -A -o custom-columns='NAMESPACE:.metadata.namespace,NAME:.metadata.name' --no-headers | grep 'volsync-.*-cache' | while read ns name; do echo "Deleting $ns/$name"; kubectl delete pvc -n "$ns" "$name"; done
 
   unlock:
-    desc: Remove all stale restic locks from volsync backup repositories
+    desc: Remove stale restic locks and retry stuck VolSync backups now
     cmds:
       - kubectl delete job volsync-unlock-manual -n default --ignore-not-found
       - kubectl create job --from=cronjob/volsync-unlock volsync-unlock-manual -n default

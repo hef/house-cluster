@@ -4,77 +4,207 @@ kind: CronJob
 metadata:
   name: volsync-unlock
 spec:
-  schedule: "30 1,5,9,13,17,21 * * *"
-  concurrencyPolicy: Forbid
+  # Hourly, offset from VolSync's :00 backups so short jobs are done first.
+  schedule: "30 * * * *"
+  concurrencyPolicy: Replace
   successfulJobsHistoryLimit: 1
   failedJobsHistoryLimit: 3
+  startingDeadlineSeconds: 300
   jobTemplate:
     spec:
-      backoffLimit: 1
-      activeDeadlineSeconds: 600
+      backoffLimit: 0
+      activeDeadlineSeconds: 900
+      ttlSecondsAfterFinished: 3600
       template:
         spec:
           serviceAccountName: volsync-unlock
-          restartPolicy: OnFailure
+          restartPolicy: Never
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 1000
+            runAsGroup: 1000
+            fsGroup: 1000
+            seccompProfile:
+              type: RuntimeDefault
+          volumes:
+            - name: tmp
+              emptyDir: {}
           containers:
             - name: unlock
               image: quay.io/backube/volsync:0.16.0
-              command: ["/bin/sh", "-c"]
+              command: ["python3", "-u", "-c"]
               args:
                 - |
-                  TOKEN=$(cat /var/run/secrets/kubernetes.io/serviceaccount/token)
-                  CA=/var/run/secrets/kubernetes.io/serviceaccount/ca.crt
-                  API="https://kubernetes.default.svc"
+                  import base64, json, os, ssl, subprocess, sys, time, urllib.error, urllib.request
+                  from datetime import datetime, timedelta, timezone
 
-                  # Query backup-config secrets across all namespaces
-                  ENTRIES=$(curl -s --cacert "$CA" -H "Authorization: Bearer $TOKEN" \
-                    "$API/api/v1/secrets" | \
-                    python3 -c "import json,sys; d=json.load(sys.stdin); [print(i['metadata']['namespace']+'/'+i['metadata']['name']) for i in d.get('items',[]) if i['metadata']['name'].endswith('-backup-config')]")
+                  TOKEN = open("/var/run/secrets/kubernetes.io/serviceaccount/token").read()
+                  CA = "/var/run/secrets/kubernetes.io/serviceaccount/ca.crt"
+                  API = "https://kubernetes.default.svc"
+                  CTX = ssl.create_default_context(cafile=CA)
+                  STUCK_AFTER = timedelta(hours=3)
+                  STALE_SYNC = timedelta(hours=8)
+                  RESTIC_TIMEOUT = 90
+                  NOW = datetime.now(timezone.utc)
 
-                  for ENTRY in $ENTRIES; do
-                    NS=$(echo "$ENTRY" | cut -d/ -f1)
-                    SECRET=$(echo "$ENTRY" | cut -d/ -f2)
-                    echo "=== Processing $NS/$SECRET ==="
-                    # Derive the ReplicationSource name (secret is <name>-config)
-                    RS_NAME=$(echo "$SECRET" | sed 's/-config$//')
+                  def api(method, path, body=None, content_type="application/merge-patch+json"):
+                      req = urllib.request.Request(API + path, method=method)
+                      req.add_header("Authorization", "Bearer " + TOKEN)
+                      data = None
+                      if body is not None:
+                          data = json.dumps(body).encode()
+                          req.add_header("Content-Type", content_type)
+                      with urllib.request.urlopen(req, data=data, context=CTX, timeout=60) as resp:
+                          raw = resp.read()
+                          return json.loads(raw) if raw else {}
 
-                    # Check if a volsync mover pod is currently running for this backup
-                    RUNNING=$(curl -s --cacert "$CA" -H "Authorization: Bearer $TOKEN" \
-                      "$API/api/v1/namespaces/$NS/pods" | \
-                      python3 -c "
-                  import json,sys
-                  pods=json.load(sys.stdin).get('items',[])
-                  name='volsync-src-${RS_NAME}'
-                  for p in pods:
-                      pname=p['metadata']['name']
-                      phase=p['status'].get('phase','')
-                      if pname.startswith(name) and phase=='Running':
-                          print(pname)
-                  " 2>/dev/null)
+                  def parse_time(value):
+                      if not value:
+                          return None
+                      return datetime.fromisoformat(value.replace("Z", "+00:00"))
 
-                    if [ -n "$RUNNING" ]; then
-                      echo "SKIPPING: backup in progress ($RUNNING)"
-                      echo ""
-                      continue
-                    fi
+                  def restic(env, *args):
+                      try:
+                          result = subprocess.run(
+                              ["restic", "--no-cache", *args],
+                              env=env,
+                              capture_output=True,
+                              text=True,
+                              timeout=RESTIC_TIMEOUT,
+                          )
+                      except subprocess.TimeoutExpired:
+                          print(f"  restic {' '.join(args)} timed out after {RESTIC_TIMEOUT}s")
+                          return False
+                      out = (result.stdout or "") + (result.stderr or "")
+                      for line in out.strip().splitlines():
+                          print(f"  {line}")
+                      if result.returncode != 0:
+                          print(f"  restic {' '.join(args)} exited {result.returncode}")
+                          return False
+                      return True
 
-                    eval "$(curl -s --cacert "$CA" -H "Authorization: Bearer $TOKEN" \
-                      "$API/api/v1/namespaces/$NS/secrets/$SECRET" | \
-                      python3 -c "
-                  import json,sys,base64
-                  d=json.load(sys.stdin)['data']
-                  for k in ['RESTIC_REPOSITORY','RESTIC_PASSWORD','AWS_ACCESS_KEY_ID','AWS_SECRET_ACCESS_KEY']:
-                      v=base64.b64decode(d[k]).decode()
-                      print(f'export {k}=\"{v}\"')
-                  ")"
+                  def secret_env(ns, name):
+                      secret = api("GET", f"/api/v1/namespaces/{ns}/secrets/{name}")
+                      env = dict(os.environ)
+                      for key, value in (secret.get("data") or {}).items():
+                          env[key] = base64.b64decode(value).decode()
+                      return env
 
-                    restic unlock --remove-all --no-cache 2>&1 || true
-                    echo ""
-                  done
-                  echo "Done."
+                  def mover_pods(ns, rs_name):
+                      prefix = f"volsync-src-{rs_name}"
+                      pods = api("GET", f"/api/v1/namespaces/{ns}/pods").get("items", [])
+                      return [
+                          p for p in pods
+                          if p.get("metadata", {}).get("name", "").startswith(prefix)
+                      ]
+
+                  def delete_pod(ns, name):
+                      print(f"  deleting pod {ns}/{name}")
+                      try:
+                          api("DELETE", f"/api/v1/namespaces/{ns}/pods/{name}?gracePeriodSeconds=0")
+                      except urllib.error.HTTPError as err:
+                          print(f"  delete {name} failed: {err.code}")
+
+                  def force_sync(ns, name):
+                      stamp = str(int(time.time()))
+                      print(f"  annotating force-sync={stamp}")
+                      api(
+                          "PATCH",
+                          f"/apis/volsync.backube/v1alpha1/namespaces/{ns}/replicationsources/{name}",
+                          {"metadata": {"annotations": {"volsync.backube/force-sync": stamp}}},
+                      )
+
+                  sources = api("GET", "/apis/volsync.backube/v1alpha1/replicationsources").get("items", [])
+                  if not sources:
+                      print("No ReplicationSources found.")
+                      sys.exit(0)
+
+                  failures = 0
+                  for rs in sources:
+                      meta = rs.get("metadata", {})
+                      spec = rs.get("spec", {})
+                      status = rs.get("status", {})
+                      ns = meta.get("namespace")
+                      name = meta.get("name")
+                      restic_spec = spec.get("restic") or {}
+                      secret_name = restic_spec.get("repository")
+                      if not secret_name:
+                          continue
+
+                      print(f"=== {ns}/{name} ===")
+                      pods = mover_pods(ns, name)
+                      running = []
+                      stuck = []
+                      failed = []
+                      for pod in pods:
+                          pname = pod["metadata"]["name"]
+                          phase = pod.get("status", {}).get("phase", "")
+                          started = parse_time(pod.get("status", {}).get("startTime"))
+                          age = (NOW - started) if started else timedelta(0)
+                          if phase == "Running":
+                              if age > STUCK_AFTER:
+                                  print(f"  stuck mover {pname} running for {age}")
+                                  stuck.append(pname)
+                              else:
+                                  print(f"  backup in progress ({pname}, age {age})")
+                                  running.append(pname)
+                          elif phase in ("Failed", "Error", "Unknown"):
+                              print(f"  {phase} mover {pname}")
+                              failed.append(pname)
+
+                      for pname in failed + stuck:
+                          delete_pod(ns, pname)
+
+                      live = bool(running) and not stuck
+                      try:
+                          env = secret_env(ns, secret_name)
+                      except Exception as err:
+                          print(f"  failed to load secret {secret_name}: {err}")
+                          failures += 1
+                          continue
+
+                      # Always drop stale locks. Only remove-all when nothing is writing.
+                      restic(env, "unlock")
+                      if live:
+                          print("  skipping --remove-all while backup is in progress")
+                      else:
+                          if not restic(env, "unlock", "--remove-all"):
+                              failures += 1
+
+                      last_sync = parse_time(status.get("lastSyncTime"))
+                      synchronizing = any(
+                          c.get("type") == "Synchronizing" and c.get("status") == "True"
+                          for c in status.get("conditions", [])
+                      )
+                      stale = last_sync is None or (NOW - last_sync) > STALE_SYNC
+                      if stale and not live and not synchronizing:
+                          age = "never" if last_sync is None else str(NOW - last_sync)
+                          print(f"  last sync is stale ({age}); forcing a new sync")
+                          try:
+                              force_sync(ns, name)
+                          except Exception as err:
+                              print(f"  force-sync failed: {err}")
+                              failures += 1
+                      print()
+
+                  print("Done.")
+                  sys.exit(1 if failures else 0)
+              env:
+                - name: HOME
+                  value: /tmp
+                - name: TMPDIR
+                  value: /tmp
+              securityContext:
+                allowPrivilegeEscalation: false
+                readOnlyRootFilesystem: true
+                capabilities:
+                  drop: ["ALL"]
+              volumeMounts:
+                - name: tmp
+                  mountPath: /tmp
               resources:
                 requests:
                   cpu: 10m
                   memory: 64Mi
                 limits:
-                  memory: 128Mi
+                  memory: 256Mi
